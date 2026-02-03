@@ -13,7 +13,7 @@ MODEL_PATH = Path(__file__).parent / "models" / "model_accident_binary_optimized
 # Features dans l'ordre attendu par le modèle
 FEATURE_ORDER = [
     "est_nuit", "est_heure_pointe", "jour_semaine", "est_weekend",
-    "region", "dep", "agg", "vma",
+    "agg", "vma",
     "impl_vehicule_leger", "impl_poids_lourd", "impl_pieton"
 ]
 
@@ -48,7 +48,7 @@ def predict(features_dict: dict[str, Any]) -> dict[str, Any]:
     Effectue une prédiction à partir d'un dictionnaire de features.
 
     Args:
-        features_dict: Dictionnaire avec les 11 features
+        features_dict: Dictionnaire avec les 9 features
 
     Returns:
         Dictionnaire avec gravite (0/1), probabilite_grave (float), label (str)

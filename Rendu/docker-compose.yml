@@ -1,0 +1,73 @@
+networks:
+  accident-ml:
+    name: accident-ml
+    driver: bridge
+
+services:
+  accident-ml-db:
+    image: postgres:17-alpine
+    container_name: accident-ml-db
+    networks:
+      - accident-ml
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: test_user
+      POSTGRES_PASSWORD: example
+      POSTGRES_DB: accidents
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U test_user -d accidents"]
+      interval: 60s
+      timeout: 10s
+      retries: 3
+
+  accident-ml-backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    image: cpheat/accident-ml-backend:0.0.3
+    container_name: accident-ml-backend
+    depends_on:
+      accident-ml-db:
+        condition: service_healthy
+    networks:
+      - accident-ml
+    ports:
+      - "8000:8000"
+    volumes:
+      - backend_storage:/app/storage
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://test_user:example@accident-ml-db:5432/accidents
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "curl -sS http://localhost:8000/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+  accident-ml-front:
+    build:
+      context: ./front
+      dockerfile: Dockerfile
+    image: cpheat/accident-ml-front:0.0.3
+    container_name: accident-ml-front  
+    depends_on:
+      accident-ml-backend:
+        condition: service_healthy
+    networks:
+      - accident-ml
+    ports:
+      - "8501:8501"
+    environment:
+      API_URL: http://accident-ml-backend:8000
+    volumes:
+      - backend_storage:/app/storage
+    restart: unless-stopped
+
+volumes:
+  backend_storage:
+  postgres_data:

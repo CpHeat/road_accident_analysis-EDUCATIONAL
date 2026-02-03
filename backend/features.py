@@ -111,14 +111,6 @@ DEPARTEMENTS: dict[str, dict[str, float]] = {
     "976": {"lat": -12.8, "lon": 45.2},   # Mayotte
 }
 
-# Encodage des régions (ordre alphabétique = LabelEncoder)
-REGION_ENCODING = {
-    "centre": 0,
-    "dom_tom": 1,
-    "nord": 2,
-    "sud": 3,
-}
-
 # Cache pour les horaires de lever/coucher du soleil
 _sun_times_cache: dict[str, dict[str, time]] = {}
 
@@ -129,34 +121,6 @@ def _get_departement_coords(departement: str) -> tuple[float, float]:
         raise ValueError(f"Département inconnu: {departement}")
     coords = DEPARTEMENTS[departement]
     return coords["lat"], coords["lon"]
-
-
-def _convert_departement_code(departement: str) -> int:
-    """Convertit le code département en numérique (2A→200, 2B→201)."""
-    if departement == "2A":
-        return 200
-    elif departement == "2B":
-        return 201
-    else:
-        return int(departement)
-
-
-def get_region_str(latitude: float, longitude: float) -> str:
-    """Détermine la région géographique depuis les coordonnées."""
-    if longitude < -50 or longitude > 40:
-        return "dom_tom"
-    elif latitude >= 47:
-        return "nord"
-    elif latitude >= 44:
-        return "centre"
-    else:
-        return "sud"
-
-
-def _get_region_encoded(latitude: float, longitude: float) -> int:
-    """Retourne la région encodée (compatible LabelEncoder)."""
-    region_str = get_region_str(latitude, longitude)
-    return REGION_ENCODING[region_str]
 
 
 async def _get_sun_times(
@@ -247,16 +211,16 @@ async def derive_all_features(
     """
     Dérive toutes les features à partir des entrées brutes.
 
-    Retourne un dictionnaire avec les 11 features dans l'ordre attendu par le modèle:
+    Retourne un dictionnaire avec les 9 features dans l'ordre attendu par le modèle:
     ['est_nuit', 'est_heure_pointe', 'jour_semaine', 'est_weekend',
-     'region', 'dep', 'agg', 'vma',
+     'agg', 'vma',
      'impl_vehicule_leger', 'impl_poids_lourd', 'impl_pieton']
     """
     # Parse date et heure
     date_obj = date.fromisoformat(date_str)
     hour, minute = map(int, heure_str.split(":"))
 
-    # Coordonnées du département
+    # Coordonnées du département (pour calcul lever/coucher du soleil)
     latitude, longitude = _get_departement_coords(departement)
 
     # Horaires du soleil
@@ -267,8 +231,6 @@ async def derive_all_features(
         "est_heure_pointe": _is_rush_hour(hour),
         "jour_semaine": _get_day_of_week(date_obj),
         "est_weekend": _is_weekend(date_obj),
-        "region": _get_region_encoded(latitude, longitude),
-        "dep": _convert_departement_code(departement),
         "agg": 1 if agg else 0,
         "vma": vma,
         "impl_vehicule_leger": 1 if impl_vehicule_leger else 0,
