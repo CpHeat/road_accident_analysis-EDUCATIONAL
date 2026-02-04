@@ -28,7 +28,7 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    image: cpheat/accident-ml-backend:0.0.3
+    image: cpheat/accident-ml-backend:1.0.3
     container_name: accident-ml-backend
     depends_on:
       accident-ml-db:
@@ -53,7 +53,7 @@ services:
     build:
       context: ./front
       dockerfile: Dockerfile
-    image: cpheat/accident-ml-front:0.0.3
+    image: cpheat/accident-ml-front:1.0.3
     container_name: accident-ml-front  
     depends_on:
       accident-ml-backend:
