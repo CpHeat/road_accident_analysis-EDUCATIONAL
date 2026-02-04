@@ -25,3 +25,6 @@ Décomposition du docker-compose.yml :
   - pour front: depends_on définit la necessité d'atendre que le backend soit up avant de lancer le front
   - les variables d'environnement définissent l'adresse de l'API depuis le cotneneur (on utilise le nom du conteneur et son port interne pour y accéder a traver le network docker)
   - définition des volumes docker
+
+Les images sont taggées directement dans docker compose
+pour push l'image du backend sur dockerhub j'utilise par exemple docker push cpheat/accident-ml-backend:1.0.3 (si la version que j'ai build via docker compose est la 1.0.3)
