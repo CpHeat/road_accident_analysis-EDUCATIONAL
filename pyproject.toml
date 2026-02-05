@@ -17,7 +17,7 @@ commit_parser = "conventional"
 logging_use_named_masks = false
 major_on_zero = true
 allow_zero_version = false
-repo_dir = "D:\\Suivi de formation\\simplon-ai-developer-training\\W31-W33-ML-DEPLOYMENT-CI-CD"
+repo_dir = "."
 no_git_verify = false
 tag_format = "v{version}"
 add_partial_tags = false
@@ -33,7 +33,6 @@ prerelease = true
 prerelease_token = "alpha"
 
 [tool.semantic_release.changelog]
-changelog_file = ""
 exclude_commit_patterns = [
     '''chore(?:\([^)]*?\))?: .+''',
     '''ci(?:\([^)]*?\))?: .+''',
@@ -48,8 +47,8 @@ insertion_flag = "<!-- version list -->"
 template_dir = "templates"
 
 [tool.semantic_release.changelog.default_templates]
-changelog_file = "rendu/CI-CD/docs/source/CHANGELOG.rst"
-output_format = "rst"
+changelog_file = "CI-CD/docs/source/CHANGELOG.md"
+output_format = "md"
 mask_initial_release = true
 
 [tool.semantic_release.changelog.environment]
