@@ -66,4 +66,8 @@ Question 3 - Comment python-semantic-release fonctionne ?
 - uv run semantic-release generate-config --pyproject >> pyproject.toml permet de générer une configuration de base à ajouter dans pyproject.toml
 on pourra y définir quels mots-clés chercher dans les commits pour céfinir les versions, comment gérer le changelog, les builds...
 - le changelog est généré a chaque semantic release
-- 
+- les releases sont créées par --vcs-release (code source en .zip, distribution selon la définition de build_command)
+
+Mission 4 - Comparatif d'outils
+Ruff vs Flake8 vs Pylint
+Ruff est plus rapide et supporte une grande partie des lints de flake8
