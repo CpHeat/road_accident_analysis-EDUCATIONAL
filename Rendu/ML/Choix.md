@@ -1,2 +1,0 @@
-J'ai choisi d'étudier les années post-2019 car l'adoption de l'ESP (derniere avancée majeure en terme de securité routiere technologique, obligatoire sur tout vehicule neuf depuis 2014) est estimée a un tiers du parc à partir de cette année là. On aura donc un ensemble de données très large sans incohérence majeure due a des différences technologiques
-on choisi une classification binaire (accident grave/bénin) pour simplifier la prédiction et permettre une meilleure qualité de prédiction
