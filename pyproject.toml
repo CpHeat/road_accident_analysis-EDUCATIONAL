@@ -21,6 +21,7 @@ repo_dir = "D:\\Suivi de formation\\simplon-ai-developer-training\\W31-W33-ML-DE
 no_git_verify = false
 tag_format = "v{version}"
 add_partial_tags = false
+build_command = "python -m build --sdist --wheel ."
 
 [tool.semantic_release.branches.main]
 match = "(main|master)"
