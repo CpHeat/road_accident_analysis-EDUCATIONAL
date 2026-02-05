@@ -1,10 +1,11 @@
 [project]
 name = "rendu"
-version = "1.0.0"
+version = "1.0.1"
 description = "CI/CD Project"
 readme = "README.md"
 requires-python = ">=3.14"
 dependencies = [
+    "build>=1.4.0",
     "python-semantic-release>=10.5.3",
     "semantic-release>=0.1.0",
 ]
@@ -21,7 +22,7 @@ repo_dir = "D:\\Suivi de formation\\simplon-ai-developer-training\\W31-W33-ML-DE
 no_git_verify = false
 tag_format = "v{version}"
 add_partial_tags = false
-build_command = "python -m build --sdist --wheel ."
+build_command = "uv run python -m build --sdist --wheel ."
 
 [tool.semantic_release.branches.main]
 match = "(main|master)"
