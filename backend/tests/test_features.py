@@ -9,6 +9,7 @@ from datetime import date, time
 from unittest.mock import AsyncMock, patch
 
 import pytest
+
 from features import (
     DEPARTEMENTS,
     _get_day_of_week,
