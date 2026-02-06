@@ -126,9 +126,7 @@ def _get_departement_coords(departement: str) -> tuple[float, float]:
     return coords["lat"], coords["lon"]
 
 
-async def _get_sun_times(
-    date_str: str, latitude: float, longitude: float
-) -> dict[str, time]:
+async def _get_sun_times(date_str: str, latitude: float, longitude: float) -> dict[str, time]:
     """
     Récupère les heures de lever/coucher du soleil via API externe.
     Utilise un cache en mémoire pour éviter les appels répétés.
@@ -157,12 +155,8 @@ async def _get_sun_times(
             if data.get("status") == "OK":
                 results = data["results"]
                 # Parse ISO format: "2024-01-15T07:30:00+00:00"
-                sunrise = datetime.fromisoformat(
-                    results["sunrise"].replace("Z", "+00:00")
-                ).time()
-                sunset = datetime.fromisoformat(
-                    results["sunset"].replace("Z", "+00:00")
-                ).time()
+                sunrise = datetime.fromisoformat(results["sunrise"].replace("Z", "+00:00")).time()
+                sunset = datetime.fromisoformat(results["sunset"].replace("Z", "+00:00")).time()
 
                 sun_times = {"sunrise": sunrise, "sunset": sunset}
                 _sun_times_cache[cache_key] = sun_times
