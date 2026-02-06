@@ -1,7 +1,10 @@
+import logging
 from datetime import date, datetime, time
 from typing import Any
 
 import httpx
+
+logger = logging.getLogger(__name__)
 
 # Table des centroïdes des départements français
 DEPARTEMENTS: dict[str, dict[str, float]] = {
@@ -165,7 +168,7 @@ async def _get_sun_times(
                 _sun_times_cache[cache_key] = sun_times
                 return sun_times
     except Exception:
-        pass
+        logger.warning("Failed to fetch sun times from API, using fallback", exc_info=True)
 
     # Fallback: 6h-22h
     fallback = {"sunrise": time(6, 0), "sunset": time(22, 0)}
