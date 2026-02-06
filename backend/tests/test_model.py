@@ -8,7 +8,6 @@ from typing import Any
 from unittest.mock import MagicMock, patch
 
 import pytest
-
 from model import FEATURE_ORDER, predict
 
 
@@ -126,12 +125,14 @@ class TestLoadModel:
 
     def test_load_model_file_not_found(self) -> None:
         """FileNotFoundError si modèle inexistant."""
+        from pathlib import Path
+
         from model import load_model
 
-        with patch("model.MODEL_PATH") as mock_path:
-            mock_path.exists.return_value = False
-            mock_path.__str__ = lambda x: "/fake/path/model.joblib"
+        fake_path = MagicMock(spec=Path)
+        fake_path.exists.return_value = False
 
+        with patch("model.MODEL_PATH", fake_path):
             with pytest.raises(FileNotFoundError):
                 load_model()
 

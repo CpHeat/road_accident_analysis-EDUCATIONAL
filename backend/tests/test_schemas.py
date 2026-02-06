@@ -100,7 +100,7 @@ class TestPredictionResponseSchema:
         """Réponse sans ID (optionnel) acceptée."""
         from schemas import PredictionResponse
 
-        response = PredictionResponse(gravite=1, probabilite_grave=0.8765, label="Grave")
+        response = PredictionResponse(id=None, gravite=1, probabilite_grave=0.8765, label="Grave")
 
         assert response.id is None
         assert response.gravite == 1
@@ -110,7 +110,7 @@ class TestPredictionResponseSchema:
         from schemas import PredictionResponse
 
         with pytest.raises(ValidationError) as exc_info:
-            PredictionResponse(gravite=2, probabilite_grave=0.5, label="Test")
+            PredictionResponse(id=None, gravite=2, probabilite_grave=0.5, label="Test")
 
         assert "gravite" in str(exc_info.value)
 
@@ -119,7 +119,7 @@ class TestPredictionResponseSchema:
         from schemas import PredictionResponse
 
         with pytest.raises(ValidationError) as exc_info:
-            PredictionResponse(gravite=0, probabilite_grave=1.5, label="Test")
+            PredictionResponse(id=None, gravite=0, probabilite_grave=1.5, label="Test")
 
         assert "probabilite_grave" in str(exc_info.value)
 

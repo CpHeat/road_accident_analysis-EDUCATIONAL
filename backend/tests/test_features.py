@@ -6,11 +6,9 @@ Ces tests vérifient la logique métier de dérivation des features
 """
 
 from datetime import date, time
-from typing import Any
 from unittest.mock import AsyncMock, patch
 
 import pytest
-
 from features import (
     DEPARTEMENTS,
     _get_day_of_week,
@@ -53,7 +51,7 @@ class TestDepartementCoords:
 
     def test_all_departements_have_coords(self) -> None:
         """Tous les départements ont des coordonnées valides."""
-        for dep_code, coords in DEPARTEMENTS.items():
+        for _, coords in DEPARTEMENTS.items():
             assert "lat" in coords
             assert "lon" in coords
             assert -90 <= coords["lat"] <= 90
