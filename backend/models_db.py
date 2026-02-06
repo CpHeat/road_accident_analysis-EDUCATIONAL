@@ -8,6 +8,7 @@ from sqlalchemy.sql import func
 
 class Prediction(Base):
     """Table des prédictions effectuées."""
+
     __tablename__ = "predictions"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
