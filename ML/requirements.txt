@@ -1,0 +1,10 @@
+catboost
+pandas
+lightgbm
+xgboost
+joblib
+scikit-learn
+hyperopt
+fastparquet
+nbformat
+setuptools
