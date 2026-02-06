@@ -15,9 +15,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 # Configuration du logging
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
 
@@ -38,9 +36,7 @@ app = FastAPI(
 
 
 @app.exception_handler(RequestValidationError)
-async def validation_exception_handler(
-    request: Request, exc: RequestValidationError
-) -> JSONResponse:
+async def validation_exception_handler(request: Request, exc: RequestValidationError) -> JSONResponse:
     """Log les erreurs de validation Pydantic (422)."""
     logger.error("=" * 50)
     logger.error("ERREUR DE VALIDATION (422 Unprocessable Entity)")
@@ -81,9 +77,7 @@ async def health_check() -> dict:
 
 
 @app.post("/predict", response_model=PredictionResponse)
-async def predict_accident(
-    data: AccidentInput, db: Annotated[AsyncSession, Depends(get_db)]
-) -> PredictionResponse:
+async def predict_accident(data: AccidentInput, db: Annotated[AsyncSession, Depends(get_db)]) -> PredictionResponse:
     """
     Prédit la gravité d'un accident de la route.
 
@@ -155,11 +149,6 @@ async def get_predictions(
     offset: Annotated[int, Query(ge=0)] = 0,
 ) -> Sequence[Prediction]:
     """Récupère l'historique des prédictions."""
-    query = (
-        select(Prediction)
-        .order_by(Prediction.created_at.desc())
-        .limit(limit)
-        .offset(offset)
-    )
+    query = select(Prediction).order_by(Prediction.created_at.desc()).limit(limit).offset(offset)
     result = await db.execute(query)
     return result.scalars().all()

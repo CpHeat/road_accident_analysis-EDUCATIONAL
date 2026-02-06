@@ -125,7 +125,7 @@ upload_to_vcs_release = true
 ##############################################################################################
 
 [tool.ruff]
-line-length = 88
+line-length = 120
 target-version = "py313"
 
 [tool.ruff.lint]

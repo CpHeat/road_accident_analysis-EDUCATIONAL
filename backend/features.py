@@ -1,7 +1,10 @@
+import logging
 from datetime import date, datetime, time
 from typing import Any
 
 import httpx
+
+logger = logging.getLogger(__name__)
 
 # Table des centroïdes des départements français
 DEPARTEMENTS: dict[str, dict[str, float]] = {
@@ -123,9 +126,7 @@ def _get_departement_coords(departement: str) -> tuple[float, float]:
     return coords["lat"], coords["lon"]
 
 
-async def _get_sun_times(
-    date_str: str, latitude: float, longitude: float
-) -> dict[str, time]:
+async def _get_sun_times(date_str: str, latitude: float, longitude: float) -> dict[str, time]:
     """
     Récupère les heures de lever/coucher du soleil via API externe.
     Utilise un cache en mémoire pour éviter les appels répétés.
@@ -154,18 +155,14 @@ async def _get_sun_times(
             if data.get("status") == "OK":
                 results = data["results"]
                 # Parse ISO format: "2024-01-15T07:30:00+00:00"
-                sunrise = datetime.fromisoformat(
-                    results["sunrise"].replace("Z", "+00:00")
-                ).time()
-                sunset = datetime.fromisoformat(
-                    results["sunset"].replace("Z", "+00:00")
-                ).time()
+                sunrise = datetime.fromisoformat(results["sunrise"].replace("Z", "+00:00")).time()
+                sunset = datetime.fromisoformat(results["sunset"].replace("Z", "+00:00")).time()
 
                 sun_times = {"sunrise": sunrise, "sunset": sunset}
                 _sun_times_cache[cache_key] = sun_times
                 return sun_times
     except Exception:
-        pass
+        logger.warning("Failed to fetch sun times from API, using fallback", exc_info=True)
 
     # Fallback: 6h-22h
     fallback = {"sunrise": time(6, 0), "sunset": time(22, 0)}

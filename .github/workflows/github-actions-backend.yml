@@ -51,6 +51,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - name: Gitleaks scan
         uses: gitleaks/gitleaks-action@v2
         env:
@@ -78,7 +80,7 @@ jobs:
   #     postgres:
   #       image: postgres
   #       env:
-  #         POSTGRES_PASSWORD: postgres
+  #         POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
   #       options: >-
   #         --health-cmd pg_isready
   #         --health-interval 10s
