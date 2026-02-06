@@ -1,6 +1,6 @@
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.5.0
+    rev: v6.0.0
     hooks:
       - id: trailing-whitespace
         files: ^backend/
@@ -24,13 +24,12 @@ repos:
       - id: ruff-format
         files: ^backend/
 
-  - repo: local
+  - repo: https://github.com/Yelp/detect-secrets
+    rev: v1.5.0
     hooks:
       - id: detect-secrets
-        name: detect-secrets
-        entry: detect-secrets-hook --baseline .secrets.baseline
-        language: system
         files: ^backend/
+        args: ['--baseline', '.secrets.baseline']
 
   - repo: local
     hooks:
