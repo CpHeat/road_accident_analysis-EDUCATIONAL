@@ -1,17 +1,17 @@
 import logging
 from contextlib import asynccontextmanager
+from typing import Annotated
 
+from database import get_db, init_db
 from fastapi import Depends, FastAPI, HTTPException, Query, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
-from sqlalchemy import select
-from sqlalchemy.ext.asyncio import AsyncSession
-
-from database import get_db, init_db
 from features import derive_all_features
 from model import load_model, predict
 from models_db import Prediction
 from schemas import AccidentInput, PredictionHistory, PredictionResponse
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
 
 # Configuration du logging
 logging.basicConfig(
@@ -80,7 +80,7 @@ async def health_check():
 
 @app.post("/predict", response_model=PredictionResponse)
 async def predict_accident(
-    data: AccidentInput, db: AsyncSession = Depends(get_db)
+    data: AccidentInput, db: Annotated[AsyncSession, Depends(get_db)]
 ) -> PredictionResponse:
     """
     Prédit la gravité d'un accident de la route.
@@ -140,17 +140,17 @@ async def predict_accident(
 
     except ValueError as e:
         logger.error(f"Erreur de validation: {e}")
-        raise HTTPException(status_code=400, detail=str(e))
+        raise HTTPException(status_code=400, detail=str(e)) from e
     except FileNotFoundError as e:
         logger.error(f"Modèle non trouvé: {e}")
-        raise HTTPException(status_code=503, detail=str(e))
+        raise HTTPException(status_code=503, detail=str(e)) from e
 
 
 @app.get("/predictions", response_model=list[PredictionHistory])
 async def get_predictions(
-    db: AsyncSession = Depends(get_db),
-    limit: int = Query(default=100, ge=1, le=1000),
-    offset: int = Query(default=0, ge=0),
+    db: Annotated[AsyncSession, Depends(get_db)],
+    limit: Annotated[int, Query(ge=1, le=1000)] = 100,
+    offset: Annotated[int, Query(ge=0)] = 0,
 ):
     """Récupère l'historique des prédictions."""
     query = (
