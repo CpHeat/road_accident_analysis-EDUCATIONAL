@@ -1,9 +1,9 @@
 from datetime import datetime
+
+from database import Base
 from sqlalchemy import JSON, DateTime, Float, Integer, String
 from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy.sql import func
-
-from database import Base
 
 
 class Prediction(Base):
