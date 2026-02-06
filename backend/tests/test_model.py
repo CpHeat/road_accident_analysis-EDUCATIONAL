@@ -74,15 +74,17 @@ class TestPredict:
 
     def test_predict_with_preprocessing(self, valid_features: dict[str, Any]) -> None:
         """Prédiction avec imputer et scaler (CatBoost)."""
+        import numpy as np
+
         mock_model = MagicMock()
         mock_model.predict.return_value = [0]
         mock_model.predict_proba.return_value = [[0.70, 0.30]]
 
         mock_imputer = MagicMock()
-        mock_imputer.transform.return_value = [[0, 1, 5, 1, 1, 50, 1, 0, 0]]
+        mock_imputer.transform.return_value = np.array([[0, 1, 5, 1, 1, 50, 1, 0, 0]])
 
         mock_scaler = MagicMock()
-        mock_scaler.transform.return_value = [[0.0, 1.0, 0.5, 1.0, 1.0, 0.4, 1.0, 0.0, 0.0]]
+        mock_scaler.transform.return_value = np.array([[0.0, 1.0, 0.5, 1.0, 1.0, 0.4, 1.0, 0.0, 0.0]])
 
         with (
             patch("model._model", mock_model),
