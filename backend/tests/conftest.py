@@ -7,7 +7,7 @@ Architecture MVC:
 - Données de test réutilisables
 """
 
-from collections.abc import AsyncGenerator
+from collections.abc import AsyncIterator, Iterator
 from datetime import time
 from typing import Any
 from unittest.mock import AsyncMock, MagicMock, patch
@@ -97,7 +97,7 @@ def mock_model() -> MagicMock:
 
 
 @pytest.fixture
-def test_client(mock_db_session: AsyncMock, mock_model: MagicMock) -> TestClient:
+def test_client(mock_db_session: AsyncMock, mock_model: MagicMock) -> Iterator[TestClient]:
     """Client de test synchrone avec mocks."""
     with (
         patch.dict("os.environ", {"POSTGRES_USER": "test", "POSTGRES_PASSWORD": "test"}),
@@ -107,7 +107,7 @@ def test_client(mock_db_session: AsyncMock, mock_model: MagicMock) -> TestClient
         from main import app
 
         # Override de la dépendance DB
-        async def override_get_db() -> AsyncGenerator[AsyncMock, None]:
+        async def override_get_db() -> AsyncIterator[AsyncMock]:
             yield mock_db_session
 
         from database import get_db
@@ -122,7 +122,7 @@ def test_client(mock_db_session: AsyncMock, mock_model: MagicMock) -> TestClient
 
 
 @pytest.fixture
-async def async_client(mock_db_session: AsyncMock, mock_model: MagicMock) -> AsyncGenerator[AsyncClient, None]:
+async def async_client(mock_db_session: AsyncMock, mock_model: MagicMock) -> AsyncIterator[AsyncClient]:
     """Client de test asynchrone avec mocks."""
     with (
         patch.dict("os.environ", {"POSTGRES_USER": "test", "POSTGRES_PASSWORD": "test"}),
@@ -131,7 +131,7 @@ async def async_client(mock_db_session: AsyncMock, mock_model: MagicMock) -> Asy
     ):
         from main import app
 
-        async def override_get_db() -> AsyncGenerator[AsyncMock, None]:
+        async def override_get_db() -> AsyncIterator[AsyncMock]:
             yield mock_db_session
 
         from database import get_db

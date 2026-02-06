@@ -45,7 +45,7 @@ steps:
           # Install a specific version of uv.
           version: "0.9.29"
           enable-cache: true
-    
+
     - name: Install the project
         run: uv sync
 

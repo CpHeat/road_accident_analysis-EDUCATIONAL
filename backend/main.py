@@ -3,16 +3,17 @@ from collections.abc import AsyncGenerator, Sequence
 from contextlib import asynccontextmanager
 from typing import Annotated
 
-from database import get_db, init_db
 from fastapi import Depends, FastAPI, HTTPException, Query, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from database import get_db, init_db
 from features import derive_all_features
 from model import load_model, predict
 from models_db import Prediction
 from schemas import AccidentInput, PredictionHistory, PredictionResponse
-from sqlalchemy import select
-from sqlalchemy.ext.asyncio import AsyncSession
 
 # Configuration du logging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")

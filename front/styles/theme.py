@@ -3,6 +3,7 @@
 
 class Colors:
     """Palette de couleurs."""
+
     PRIMARY = "#3b82f6"
     PRIMARY_DARK = "#1d4ed8"
     SUCCESS = "#22c55e"
@@ -19,6 +20,7 @@ class Colors:
 
 class GaugeConfig:
     """Configuration du gauge Plotly."""
+
     STEPS = [
         {"range": [0, 33.3], "color": Colors.SUCCESS_LIGHT},
         {"range": [33.3, 66.6], "color": Colors.WARNING_LIGHT},
@@ -31,6 +33,7 @@ class GaugeConfig:
 
 class Layout:
     """Configuration du layout."""
+
     FORM_RATIO = 1
     RESULT_RATIO = 1.5
     GAUGE_MARGIN = dict(l=30, r=30, t=60, b=30)

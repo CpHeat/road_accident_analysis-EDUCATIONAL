@@ -54,7 +54,7 @@ services:
       context: ./front
       dockerfile: Dockerfile
     image: cpheat/accident-ml-front:1.0.3
-    container_name: accident-ml-front  
+    container_name: accident-ml-front
     depends_on:
       accident-ml-backend:
         condition: service_healthy
