@@ -1,7 +1,7 @@
 import logging
+from collections.abc import AsyncGenerator, Sequence
 from contextlib import asynccontextmanager
-from collections.abc import AsyncGenerator
-from typing import Annotated, Sequence
+from typing import Annotated
 
 from database import get_db, init_db
 from fastapi import Depends, FastAPI, HTTPException, Query, Request
@@ -16,14 +16,13 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 # Configuration du logging
 logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 )
 logger = logging.getLogger(__name__)
 
 
 @asynccontextmanager
-async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
+async def lifespan(app: FastAPI) -> AsyncGenerator[None]:
     """Charge le modèle et initialise la BDD au démarrage."""
     load_model()
     await init_db()
@@ -39,7 +38,9 @@ app = FastAPI(
 
 
 @app.exception_handler(RequestValidationError)
-async def validation_exception_handler(request: Request, exc: RequestValidationError) -> JSONResponse:
+async def validation_exception_handler(
+    request: Request, exc: RequestValidationError
+) -> JSONResponse:
     """Log les erreurs de validation Pydantic (422)."""
     logger.error("=" * 50)
     logger.error("ERREUR DE VALIDATION (422 Unprocessable Entity)")
@@ -58,7 +59,7 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
         logger.error(f"  - Champ: {error.get('loc')}")
         logger.error(f"    Type: {error.get('type')}")
         logger.error(f"    Message: {error.get('msg')}")
-        if error.get('input') is not None:
+        if error.get("input") is not None:
             logger.error(f"    Valeur reçue: {error.get('input')}")
 
     logger.error("=" * 50)

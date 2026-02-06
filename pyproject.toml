@@ -24,6 +24,9 @@ dependencies = [
     "plotly>=6.0.0",
     "requests>=2.32.0",
     "pandas-stubs>=3.0.0.260204",
+    "bandit>=1.9.3",
+    "safety>=3.7.0",
+    "detect-secrets>=1.5.0",
 ]
 
 ##############################################################################################
@@ -166,3 +169,22 @@ testpaths = ["tests"]
 python_files = "test_*.py"
 python_functions = "test_*"
 addopts = "--strict-markers --cov=app --cov-report=term-missing"
+
+##############################################################################################
+####################################### BANDIT ###############################################
+##############################################################################################
+
+[tool.bandit]
+  exclude_dirs = [
+      ".venv",
+      "venv",
+      "__pycache__",
+      ".git",
+      ".mypy_cache",
+      ".pytest_cache",
+      "node_modules",
+      ".tox",
+      "build",
+      "dist"
+  ]
+  targets = ["./backend"]

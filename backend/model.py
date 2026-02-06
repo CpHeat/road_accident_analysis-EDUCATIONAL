@@ -12,9 +12,15 @@ MODEL_PATH = Path(__file__).parent / "models" / "model_accident_binary_optimized
 
 # Features dans l'ordre attendu par le modèle
 FEATURE_ORDER = [
-    "est_nuit", "est_heure_pointe", "jour_semaine", "est_weekend",
-    "agg", "vma",
-    "impl_vehicule_leger", "impl_poids_lourd", "impl_pieton"
+    "est_nuit",
+    "est_heure_pointe",
+    "jour_semaine",
+    "est_weekend",
+    "agg",
+    "vma",
+    "impl_vehicule_leger",
+    "impl_poids_lourd",
+    "impl_pieton",
 ]
 
 # Variables globales pour le pipeline

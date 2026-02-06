@@ -23,6 +23,7 @@ class PredictionResponse(BaseModel):
 
 class PredictionHistory(BaseModel):
     """Historique complet d'une prédiction."""
+
     id: int
     created_at: datetime
     input_date: str
