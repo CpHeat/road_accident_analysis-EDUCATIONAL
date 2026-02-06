@@ -1,17 +1,51 @@
 repos:
-  - repo: https://github.com/astral-sh/uv-pre-commit
-    rev: 0.10.0
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
     hooks:
-      - id: uv-lock
+      - id: trailing-whitespace
+        files: ^backend/
+      - id: end-of-file-fixer
+        files: ^backend/
+      - id: check-yaml
+        files: ^backend/
+      - id: check-added-large-files
+        files: ^backend/
+      - id: detect-private-key
+        files: ^backend/
+      - id: check-merge-conflict
+        files: ^backend/
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.15.0
     hooks:
-      - id: ruff-check
-        # args: [ --fix ]
+      - id: ruff
+        files: ^backend/
+        args: [--fix]
       - id: ruff-format
-  
-  - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.19.1
+        files: ^backend/
+
+  - repo: local
     hooks:
-    -   id: mypy
+      - id: detect-secrets
+        name: detect-secrets
+        entry: detect-secrets-hook --baseline .secrets.baseline
+        language: system
+        files: ^backend/
+
+  - repo: local
+    hooks:
+      - id: mypy
+        name: mypy
+        entry: bash -c "cd backend && uv run mypy ."
+        language: system
+        types: [python]
+        files: ^backend/
+        pass_filenames: false
+
+      - id: pytest-check
+        name: pytest-check
+        entry: bash -c "cd backend && uv run pytest tests"
+        language: system
+        types: [python]
+        files: ^backend/
+        pass_filenames: false

@@ -90,13 +90,11 @@ dependencies = [
 dev = [
     { name = "bandit" },
     { name = "mypy" },
-    { name = "ruff" },
-    { name = "safety" },
-]
-test = [
     { name = "pytest" },
     { name = "pytest-asyncio" },
     { name = "pytest-cov" },
+    { name = "ruff" },
+    { name = "safety" },
 ]
 
 [package.metadata]
@@ -120,13 +118,11 @@ requires-dist = [
 dev = [
     { name = "bandit", specifier = ">=1.8.0" },
     { name = "mypy", specifier = ">=1.19.1" },
-    { name = "ruff", specifier = ">=0.15.0" },
-    { name = "safety", specifier = ">=3.0.0" },
-]
-test = [
     { name = "pytest", specifier = ">=8.0.0" },
     { name = "pytest-asyncio", specifier = ">=0.24.0" },
     { name = "pytest-cov", specifier = ">=6.0.0" },
+    { name = "ruff", specifier = ">=0.15.0" },
+    { name = "safety", specifier = ">=3.0.0" },
 ]
 
 [[package]]

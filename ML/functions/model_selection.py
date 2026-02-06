@@ -7,11 +7,7 @@ from sklearn.impute import SimpleImputer
 from sklearn.preprocessing import StandardScaler
 
 
-def select_best_model(
-    models_eval: List[Dict],
-    metric: str = 'f1',
-    average: str = 'weighted'
-) -> Dict:
+def select_best_model(models_eval: List[Dict], metric: str = "f1", average: str = "weighted") -> Dict:
     """
     Selectionne le meilleur modele parmi une liste de resultats.
 
@@ -28,9 +24,9 @@ def select_best_model(
     Returns:
         Dictionnaire du meilleur modele avec son score
     """
-    if metric == 'f1':
-        best = max(models_eval, key=lambda x: f1_score(x['y_true'], x['y_pred'], average=average))
-        best['score'] = f1_score(best['y_true'], best['y_pred'], average=average)
+    if metric == "f1":
+        best = max(models_eval, key=lambda x: f1_score(x["y_true"], x["y_pred"], average=average))
+        best["score"] = f1_score(best["y_true"], best["y_pred"], average=average)
     else:
         raise ValueError(f"Metrique '{metric}' non supportee. Utilisez 'f1'.")
 
@@ -46,7 +42,7 @@ def save_best_model(
     y_test,
     save_path: str,
     catboost_models: Optional[List[str]] = None,
-    average: str = 'weighted'
+    average: str = "weighted",
 ) -> Dict[str, Any]:
     """
     Entraine et sauvegarde le meilleur modele sur les donnees completes.
@@ -78,10 +74,12 @@ def save_best_model(
         ... )
     """
     if catboost_models is None:
-        catboost_models = ['CatBoost']
+        catboost_models = ["CatBoost"]
 
     # Extraire la liste des features
-    feature_names = list(X_full.columns) if hasattr(X_full, 'columns') else [f"feature_{i}" for i in range(X_full.shape[1])]
+    feature_names = (
+        list(X_full.columns) if hasattr(X_full, "columns") else [f"feature_{i}" for i in range(X_full.shape[1])]
+    )
 
     print(f"Entrainement du modele: {best_model_name}")
 
@@ -92,18 +90,18 @@ def save_best_model(
 
     if is_catboost:
         # CatBoost sans pipeline - preprocessing manuel
-        imputer = SimpleImputer(strategy='median')
+        imputer = SimpleImputer(strategy="median")
         scaler = StandardScaler()
         X_full_processed = scaler.fit_transform(imputer.fit_transform(X_full))
         model.fit(X_full_processed, y_full)
 
         # Sauvegarder avec les transformers
         save_object = {
-            'model': model,
-            'imputer': imputer,
-            'scaler': scaler,
-            'model_name': best_model_name,
-            'feature_names': feature_names
+            "model": model,
+            "imputer": imputer,
+            "scaler": scaler,
+            "model_name": best_model_name,
+            "feature_names": feature_names,
         }
         joblib.dump(save_object, save_path)
 
@@ -113,11 +111,7 @@ def save_best_model(
     else:
         # Pipeline sklearn standard
         model.fit(X_full, y_full)
-        save_object = {
-            'model': model,
-            'model_name': best_model_name,
-            'feature_names': feature_names
-        }
+        save_object = {"model": model, "model_name": best_model_name, "feature_names": feature_names}
         joblib.dump(save_object, save_path)
         y_pred = model.predict(X_test)
 
@@ -126,12 +120,12 @@ def save_best_model(
     print(f"F1 sur test ({average}): {f1_test:.4f}")
     print(f"\nFeatures attendues en entree ({len(feature_names)}):")
     for i, feat in enumerate(feature_names):
-        print(f"  {i+1}. {feat}")
+        print(f"  {i + 1}. {feat}")
 
     return {
-        'model': model,
-        'f1_test': f1_test,
-        'path': save_path,
-        'model_name': best_model_name,
-        'feature_names': feature_names
+        "model": model,
+        "f1_test": f1_test,
+        "path": save_path,
+        "model_name": best_model_name,
+        "feature_names": feature_names,
     }

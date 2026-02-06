@@ -10,6 +10,12 @@ permissions:
   contents: read
 
 jobs:
+  pre-commit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+      - uses: pre-commit/action@v3.0.0
   lint:
     runs-on: ubuntu-latest
     defaults:
@@ -78,16 +84,16 @@ jobs:
     runs-on: ubuntu-latest
     container: node:20-bookworm-slim
     services:
-      postgres:                                                                                                                
-        image: postgres                                                                                                        
-        env:                                                                                                                   
-          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}                                                                  
-        options: >-                                                                                                            
-          --health-cmd pg_isready                                                                                              
-          --health-interval 10s                                                                                                
-          --health-timeout 5s                                                                                                  
-          --health-retries 5                                                                                                   
-        ports:                                                                                                                 
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
           - 5432:5432
     defaults:
       run:
@@ -104,6 +110,3 @@ jobs:
         run: uv sync --group dev
       - name: Run tests
         run: uv run pytest --cov=. --cov-report=term --cov-report=xml
-
-
-    

@@ -171,6 +171,7 @@ testpaths = ["tests"]
 python_files = "test_*.py"
 python_functions = "test_*"
 addopts = "--strict-markers --cov=app --cov-report=term-missing"
+norecursedirs = [".venv", "venv", "__pycache__"]
 
 ##############################################################################################
 ####################################### BANDIT ###############################################
@@ -190,3 +191,8 @@ addopts = "--strict-markers --cov=app --cov-report=term-missing"
       "dist"
   ]
   targets = ["./backend"]
+
+[dependency-groups]
+dev = [
+    "pytest-cov>=7.0.0",
+]
