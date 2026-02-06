@@ -23,7 +23,7 @@ _imputer = None
 _scaler = None
 
 
-def load_model():
+def load_model() -> None:
     """Charge le modèle et les transformateurs depuis le fichier joblib."""
     global _model, _imputer, _scaler
 
@@ -38,7 +38,7 @@ def load_model():
     _scaler = data.get("scaler")
 
 
-def get_pipeline():
+def get_pipeline() -> tuple:
     """Retourne le pipeline complet (model, imputer, scaler)."""
     if _model is None:
         load_model()
