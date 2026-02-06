@@ -1,0 +1,17 @@
+[project]
+name = "front-streamlit"
+version = "0.1.0"
+description = "Dashboard Streamlit pour la prédiction d'accidents routiers"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "streamlit>=1.40.0",
+    "plotly>=6.0.0",
+    "requests>=2.32.0",
+]
+
+[dependency-groups]
+dev = [
+    "mypy>=1.19.1",
+    "ruff>=0.15.0",
+]
