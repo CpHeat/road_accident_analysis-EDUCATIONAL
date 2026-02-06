@@ -1,7 +1,7 @@
 import logging
+from collections.abc import AsyncGenerator, Sequence
 from contextlib import asynccontextmanager
-from collections.abc import AsyncGenerator
-from typing import Annotated, Sequence
+from typing import Annotated
 
 from database import get_db, init_db
 from fastapi import Depends, FastAPI, HTTPException, Query, Request
@@ -22,7 +22,7 @@ logger = logging.getLogger(__name__)
 
 
 @asynccontextmanager
-async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
+async def lifespan(app: FastAPI) -> AsyncGenerator[None]:
     """Charge le modèle et initialise la BDD au démarrage."""
     load_model()
     await init_db()
