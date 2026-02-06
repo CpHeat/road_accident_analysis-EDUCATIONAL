@@ -1,6 +1,7 @@
 import logging
 from contextlib import asynccontextmanager
-from typing import Annotated
+from collections.abc import AsyncGenerator
+from typing import Annotated, Sequence
 
 from database import get_db, init_db
 from fastapi import Depends, FastAPI, HTTPException, Query, Request
@@ -22,7 +23,7 @@ logger = logging.getLogger(__name__)
 
 
 @asynccontextmanager
-async def lifespan(app: FastAPI):
+async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     """Charge le modèle et initialise la BDD au démarrage."""
     load_model()
     await init_db()
@@ -38,7 +39,7 @@ app = FastAPI(
 
 
 @app.exception_handler(RequestValidationError)
-async def validation_exception_handler(request: Request, exc: RequestValidationError):
+async def validation_exception_handler(request: Request, exc: RequestValidationError) -> JSONResponse:
     """Log les erreurs de validation Pydantic (422)."""
     logger.error("=" * 50)
     logger.error("ERREUR DE VALIDATION (422 Unprocessable Entity)")
@@ -69,12 +70,12 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
 
 
 @app.get("/")
-async def root():
+async def root() -> dict:
     return {"message": "API prête à prédire"}
 
 
 @app.get("/health")
-async def health_check():
+async def health_check() -> dict:
     return {"status": "healthy"}
 
 
@@ -151,7 +152,7 @@ async def get_predictions(
     db: Annotated[AsyncSession, Depends(get_db)],
     limit: Annotated[int, Query(ge=1, le=1000)] = 100,
     offset: Annotated[int, Query(ge=0)] = 0,
-):
+) -> Sequence[Prediction]:
     """Récupère l'historique des prédictions."""
     query = (
         select(Prediction)

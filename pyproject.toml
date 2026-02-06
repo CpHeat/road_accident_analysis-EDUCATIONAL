@@ -23,6 +23,7 @@ dependencies = [
     "ruff>=0.15.0",
     "plotly>=6.0.0",
     "requests>=2.32.0",
+    "pandas-stubs>=3.0.0.260204",
 ]
 
 ##############################################################################################
@@ -150,6 +151,11 @@ warn_return_any = true
 warn_unused_configs = true
 disallow_untyped_defs = true
 plugins = ["sqlalchemy.ext.mypy.plugin"]
+
+[[tool.mypy.overrides]]
+module = "joblib.*"
+ignore_missing_imports = true
+disable_error_code = ["import-untyped"]
 
 ##############################################################################################
 ####################################### PYTEST ###############################################
