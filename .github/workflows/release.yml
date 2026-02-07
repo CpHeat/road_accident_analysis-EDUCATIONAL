@@ -27,7 +27,7 @@ jobs:
         run: |
           version=$(uv run semantic-release version --print 2>&1 | tail -1)
           echo "version=$version" >> $GITHUB_OUTPUT
-          if [ -z "$version" ] || echo "$version" | grep -q "No release"; then
+          if [ -z "$version" ] || echo "$version" | grep -qi "no release"; then
             echo "will_release=false" >> $GITHUB_OUTPUT
           else
             echo "will_release=true" >> $GITHUB_OUTPUT
