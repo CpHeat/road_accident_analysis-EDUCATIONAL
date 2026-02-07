@@ -19,6 +19,9 @@ jobs:
   release:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
+    outputs:                                                                                                                                                                                                                                                           
+      released: ${{ steps.release.outputs.released }}                                                                                                                                                                                                                  
+      version: ${{ steps.release.outputs.version }}
 
     steps:
       - name: Checkout code
@@ -33,6 +36,24 @@ jobs:
         run: uv sync
 
       - name: Python Semantic Release
-        run: uv run semantic-release version
+        id: release
+        run: |
+          output=$(uv run semantic-release version 2>&1) || true                                                                                                                                                                                                       
+          echo "$output"                                                                                                                                                                                                                                               
+                                                                                                                                                                                                                                                                       
+          if echo "$output" | grep -q "No release will be made"; then                                                                                                                                                                                                  
+            echo "released=false" >> $GITHUB_OUTPUT                                                                                                                                                                                                                    
+          else                                                                                                                                                                                                                                                         
+            version=$(uv run semantic-release version --print 2>/dev/null | tail -1)                                                                                                                                                                                   
+            echo "released=true" >> $GITHUB_OUTPUT                                                                                                                                                                                                                     
+            echo "version=$version" >> $GITHUB_OUTPUT                                                                                                                                                                                                                  
+          fi
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  build:
+    needs: release
+    if: ${{ needs.release.outputs.released == 'true' }}
+    uses: ./.github/workflows/build.yml
+    with:
+      version: ${{needs.release.outputs.version }}
