@@ -1,23 +1,10 @@
 name: Release
 
 on:
-  workflow_run:
-    workflows: ["Test"]
-    types:
-      - completed
-    branches:
-      - main
-      - develop
-
-permissions:
-  contents: write
-  packages: write
-  issues: write
-  pull-requests: write
+  workflow_call:
 
 jobs:
   release:
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     outputs:                                                                                                                                                                                                                                                           
       released: ${{ steps.release.outputs.released }}                                                                                                                                                                                                                  
@@ -56,4 +43,5 @@ jobs:
     if: ${{ needs.release.outputs.released == 'true' }}
     uses: ./.github/workflows/build.yml
     with:
-      version: ${{needs.release.outputs.version }}
+      version: ${{ needs.release.outputs.version }}
+    secrets: inherit
