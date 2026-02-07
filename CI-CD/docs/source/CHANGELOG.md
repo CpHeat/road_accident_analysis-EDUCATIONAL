@@ -2,6 +2,14 @@
 
 <!-- version list -->
 
+## v1.2.1 (2026-02-07)
+
+### Bug Fixes
+
+- Test ([#47](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/pull/47),
+  [`66a4824`](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/commit/66a48241ba6d1a0c29c72afc1259fef17abd889a))
+
+
 ## v1.2.0 (2026-02-07)
 
 ### Bug Fixes
