@@ -2,9 +2,18 @@
 
 <!-- version list -->
 
-## v1.0.0 (2026-02-07)
+## v1.0.1-beta.7 (2026-02-07)
 
-- Initial Release
+### Bug Fixes
+
+- Test fix ([#42](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/pull/42),
+  [`3469da2`](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/commit/3469da21a57070868a166592a706d8648373257d))
+
+### Features
+
+- Workflow finalize ([#42](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/pull/42),
+  [`3469da2`](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/commit/3469da21a57070868a166592a706d8648373257d))
+
 
 ## v1.0.1-beta.6 (2026-02-07)
 
