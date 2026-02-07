@@ -25,10 +25,10 @@ services:
       retries: 3
 
   accident-ml-backend:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
-    image: cpheat/accident-ml-backend:1.0.3
+    # build:
+    #   context: ./backend
+    #   dockerfile: Dockerfile
+    image: ghcr.io/cpheat/road_accident_analysis-educational:develop
     container_name: accident-ml-backend
     depends_on:
       accident-ml-db:

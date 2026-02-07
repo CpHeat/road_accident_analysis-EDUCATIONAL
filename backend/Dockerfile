@@ -7,13 +7,13 @@ ENV UV_CACHE_DIR=/app/.cache
 RUN apt-get update && apt-get install -y --no-install-recommends curl \
 && rm -rf /var/lib/apt/lists/*
 
-COPY pyproject.toml pyproject.toml
+COPY pyproject.toml uv.lock ./
 
 RUN chown -R 1001:1001 /app
 
 USER 1001:1001
 
-RUN uv sync
+RUN uv sync --frozen
 
 COPY . .
 
