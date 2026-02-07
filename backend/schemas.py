@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class AccidentInput(BaseModel):
@@ -23,6 +23,7 @@ class PredictionResponse(BaseModel):
 
 class PredictionHistory(BaseModel):
     """Historique complet d'une prédiction."""
+
     id: int
     created_at: datetime
     input_date: str
@@ -38,5 +39,4 @@ class PredictionHistory(BaseModel):
     probabilite_grave: float
     label: str
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)

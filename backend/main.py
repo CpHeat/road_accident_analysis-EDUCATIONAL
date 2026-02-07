@@ -1,28 +1,27 @@
 import logging
+from collections.abc import AsyncGenerator, Sequence
 from contextlib import asynccontextmanager
 from typing import Annotated
 
-from database import get_db, init_db
 from fastapi import Depends, FastAPI, HTTPException, Query, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from database import get_db, init_db
 from features import derive_all_features
 from model import load_model, predict
 from models_db import Prediction
 from schemas import AccidentInput, PredictionHistory, PredictionResponse
-from sqlalchemy import select
-from sqlalchemy.ext.asyncio import AsyncSession
 
 # Configuration du logging
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
 
 @asynccontextmanager
-async def lifespan(app: FastAPI):
+async def lifespan(app: FastAPI) -> AsyncGenerator[None]:
     """Charge le modèle et initialise la BDD au démarrage."""
     load_model()
     await init_db()
@@ -38,7 +37,7 @@ app = FastAPI(
 
 
 @app.exception_handler(RequestValidationError)
-async def validation_exception_handler(request: Request, exc: RequestValidationError):
+async def validation_exception_handler(request: Request, exc: RequestValidationError) -> JSONResponse:
     """Log les erreurs de validation Pydantic (422)."""
     logger.error("=" * 50)
     logger.error("ERREUR DE VALIDATION (422 Unprocessable Entity)")
@@ -57,7 +56,7 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
         logger.error(f"  - Champ: {error.get('loc')}")
         logger.error(f"    Type: {error.get('type')}")
         logger.error(f"    Message: {error.get('msg')}")
-        if error.get('input') is not None:
+        if error.get("input") is not None:
             logger.error(f"    Valeur reçue: {error.get('input')}")
 
     logger.error("=" * 50)
@@ -69,19 +68,17 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
 
 
 @app.get("/")
-async def root():
+async def root() -> dict:
     return {"message": "API prête à prédire"}
 
 
 @app.get("/health")
-async def health_check():
+async def health_check() -> dict:
     return {"status": "healthy"}
 
 
 @app.post("/predict", response_model=PredictionResponse)
-async def predict_accident(
-    data: AccidentInput, db: Annotated[AsyncSession, Depends(get_db)]
-) -> PredictionResponse:
+async def predict_accident(data: AccidentInput, db: Annotated[AsyncSession, Depends(get_db)]) -> PredictionResponse:
     """
     Prédit la gravité d'un accident de la route.
 
@@ -151,13 +148,8 @@ async def get_predictions(
     db: Annotated[AsyncSession, Depends(get_db)],
     limit: Annotated[int, Query(ge=1, le=1000)] = 100,
     offset: Annotated[int, Query(ge=0)] = 0,
-):
+) -> Sequence[Prediction]:
     """Récupère l'historique des prédictions."""
-    query = (
-        select(Prediction)
-        .order_by(Prediction.created_at.desc())
-        .limit(limit)
-        .offset(offset)
-    )
+    query = select(Prediction).order_by(Prediction.created_at.desc()).limit(limit).offset(offset)
     result = await db.execute(query)
     return result.scalars().all()

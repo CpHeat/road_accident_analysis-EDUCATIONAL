@@ -23,6 +23,12 @@ dependencies = [
     "ruff>=0.15.0",
     "plotly>=6.0.0",
     "requests>=2.32.0",
+    "pandas-stubs>=3.0.0.260204",
+    "bandit>=1.9.3",
+    "safety>=3.7.0",
+    "detect-secrets>=1.5.0",
+    "pytest>=9.0.2",
+    "pre-commit>=4.5.1",
 ]
 
 ##############################################################################################
@@ -121,7 +127,7 @@ upload_to_vcs_release = true
 ##############################################################################################
 
 [tool.ruff]
-line-length = 88
+line-length = 120
 target-version = "py313"
 
 [tool.ruff.lint]
@@ -151,6 +157,11 @@ warn_unused_configs = true
 disallow_untyped_defs = true
 plugins = ["sqlalchemy.ext.mypy.plugin"]
 
+[[tool.mypy.overrides]]
+module = "joblib.*"
+ignore_missing_imports = true
+disable_error_code = ["import-untyped"]
+
 ##############################################################################################
 ####################################### PYTEST ###############################################
 ##############################################################################################
@@ -160,3 +171,28 @@ testpaths = ["tests"]
 python_files = "test_*.py"
 python_functions = "test_*"
 addopts = "--strict-markers --cov=app --cov-report=term-missing"
+norecursedirs = [".venv", "venv", "__pycache__"]
+
+##############################################################################################
+####################################### BANDIT ###############################################
+##############################################################################################
+
+[tool.bandit]
+  exclude_dirs = [
+      ".venv",
+      "venv",
+      "__pycache__",
+      ".git",
+      ".mypy_cache",
+      ".pytest_cache",
+      "node_modules",
+      ".tox",
+      "build",
+      "dist"
+  ]
+  targets = ["./backend"]
+
+[dependency-groups]
+dev = [
+    "pytest-cov>=7.0.0",
+]

@@ -21,18 +21,22 @@ import pandas as pd
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 from sklearn.metrics import (
-    accuracy_score, precision_score, recall_score, f1_score,
-    confusion_matrix, roc_auc_score, roc_curve, auc,
-    matthews_corrcoef, balanced_accuracy_score
+    accuracy_score,
+    precision_score,
+    recall_score,
+    f1_score,
+    confusion_matrix,
+    roc_auc_score,
+    roc_curve,
+    auc,
+    matthews_corrcoef,
+    balanced_accuracy_score,
 )
 from typing import List, Dict, Optional, Union
 
 
 def _compute_metrics(
-    y_true: np.ndarray,
-    y_pred: np.ndarray,
-    y_proba: Optional[np.ndarray] = None,
-    average: str = 'weighted'
+    y_true: np.ndarray, y_pred: np.ndarray, y_proba: Optional[np.ndarray] = None, average: str = "weighted"
 ) -> Dict[str, float]:
     """
     Calcule toutes les metriques de classification.
@@ -49,11 +53,11 @@ def _compute_metrics(
     is_binary = len(np.unique(y_true)) == 2
 
     metrics = {
-        'accuracy': accuracy_score(y_true, y_pred),
-        'balanced_accuracy': balanced_accuracy_score(y_true, y_pred),
-        'precision': precision_score(y_true, y_pred, average=average, zero_division=0),
-        'recall': recall_score(y_true, y_pred, average=average, zero_division=0),
-        'f1': f1_score(y_true, y_pred, average=average, zero_division=0),
+        "accuracy": accuracy_score(y_true, y_pred),
+        "balanced_accuracy": balanced_accuracy_score(y_true, y_pred),
+        "precision": precision_score(y_true, y_pred, average=average, zero_division=0),
+        "recall": recall_score(y_true, y_pred, average=average, zero_division=0),
+        "f1": f1_score(y_true, y_pred, average=average, zero_division=0),
     }
 
     # Metriques specifiques binaires
@@ -61,23 +65,21 @@ def _compute_metrics(
         cm = confusion_matrix(y_true, y_pred)
         if cm.shape == (2, 2):
             tn, fp, fn, tp = cm.ravel()
-            metrics['specificity'] = tn / (tn + fp) if (tn + fp) > 0 else 0
-            metrics['sensitivity'] = tp / (tp + fn) if (tp + fn) > 0 else 0  # = recall
-        metrics['mcc'] = matthews_corrcoef(y_true, y_pred)
+            metrics["specificity"] = tn / (tn + fp) if (tn + fp) > 0 else 0
+            metrics["sensitivity"] = tp / (tp + fn) if (tp + fn) > 0 else 0  # = recall
+        metrics["mcc"] = matthews_corrcoef(y_true, y_pred)
 
         # AUC
         if y_proba is not None:
             y_score = y_proba[:, 1] if len(y_proba.shape) > 1 else y_proba
-            metrics['roc_auc'] = roc_auc_score(y_true, y_score)
+            metrics["roc_auc"] = roc_auc_score(y_true, y_score)
     else:
         # AUC multiclasse (One-vs-Rest)
         if y_proba is not None:
             try:
-                metrics['roc_auc'] = roc_auc_score(
-                    y_true, y_proba, multi_class='ovr', average=average
-                )
+                metrics["roc_auc"] = roc_auc_score(y_true, y_proba, multi_class="ovr", average=average)
             except ValueError:
-                metrics['roc_auc'] = None
+                metrics["roc_auc"] = None
 
     return metrics
 
@@ -87,7 +89,7 @@ def _plot_confusion_matrices(
     class_labels: Optional[List[str]] = None,
     normalize: bool = True,
     show_counts: bool = True,
-    colorscale: str = 'Blues'
+    colorscale: str = "Blues",
 ) -> go.Figure:
     """
     Affiche les matrices de confusion pour un ou plusieurs modeles.
@@ -109,19 +111,20 @@ def _plot_confusion_matrices(
     n_rows = (n_models + n_cols - 1) // n_cols
 
     fig = make_subplots(
-        rows=n_rows, cols=n_cols,
-        subplot_titles=[m['name'] for m in models_results],
+        rows=n_rows,
+        cols=n_cols,
+        subplot_titles=[m["name"] for m in models_results],
         horizontal_spacing=0.1,
-        vertical_spacing=0.15
+        vertical_spacing=0.15,
     )
 
     for idx, model in enumerate(models_results):
         row = idx // n_cols + 1
         col = idx % n_cols + 1
 
-        y_true = model['y_true']
-        y_pred = model['y_pred']
-        name = model['name']
+        y_true = model["y_true"]
+        y_pred = model["y_pred"]
+        name = model["name"]
 
         cm = confusion_matrix(y_true, y_pred)
 
@@ -132,9 +135,9 @@ def _plot_confusion_matrices(
 
         # Normalisation par ligne (recall par classe)
         if normalize:
-            cm_norm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis] * 100
+            cm_norm = cm.astype("float") / cm.sum(axis=1)[:, np.newaxis] * 100
         else:
-            cm_norm = cm.astype('float')
+            cm_norm = cm.astype("float")
 
         # Annotations
         text_annotations = []
@@ -157,7 +160,7 @@ def _plot_confusion_matrices(
             texttemplate="%{text}",
             colorscale=colorscale,
             showscale=(idx == n_models - 1),  # Echelle sur le dernier uniquement
-            hovertemplate="Reel: %{y}<br>Predit: %{x}<br>Valeur: %{text}<extra></extra>"
+            hovertemplate="Reel: %{y}<br>Predit: %{x}<br>Valeur: %{text}<extra></extra>",
         )
 
         fig.add_trace(heatmap, row=row, col=col)
@@ -175,10 +178,7 @@ def _plot_confusion_matrices(
     return fig
 
 
-def _plot_roc_curves(
-    models_results: List[Dict],
-    class_labels: Optional[List[str]] = None
-) -> Optional[go.Figure]:
+def _plot_roc_curves(models_results: List[Dict], class_labels: Optional[List[str]] = None) -> Optional[go.Figure]:
     """
     Affiche les courbes ROC pour un ou plusieurs modeles (binaire ou multiclasse).
 
@@ -190,14 +190,14 @@ def _plot_roc_curves(
         Figure Plotly ou None si pas de probabilites
     """
     # Filtrer les modeles avec probabilites
-    valid_models = [m for m in models_results if m.get('y_proba') is not None]
+    valid_models = [m for m in models_results if m.get("y_proba") is not None]
 
     if not valid_models:
         print("ROC non disponible: aucun modele avec probabilites")
         return None
 
     # Determiner si binaire ou multiclasse
-    first_y_true = valid_models[0]['y_true']
+    first_y_true = valid_models[0]["y_true"]
     n_classes = len(np.unique(first_y_true))
     is_binary = n_classes == 2
 
@@ -209,14 +209,14 @@ def _plot_roc_curves(
 
 def _plot_roc_binary(models_results: List[Dict]) -> go.Figure:
     """Courbes ROC pour classification binaire."""
-    colors = ['#3498db', '#e74c3c', '#2ecc71', '#9b59b6', '#f39c12', '#1abc9c']
+    colors = ["#3498db", "#e74c3c", "#2ecc71", "#9b59b6", "#f39c12", "#1abc9c"]
 
     fig = go.Figure()
 
     for idx, model in enumerate(models_results):
-        y_true = model['y_true']
-        y_proba = model['y_proba']
-        name = model['name']
+        y_true = model["y_true"]
+        y_proba = model["y_proba"]
+        name = model["name"]
 
         y_score = y_proba[:, 1] if len(y_proba.shape) > 1 else y_proba
         fpr, tpr, _ = roc_curve(y_true, y_score)
@@ -224,53 +224,46 @@ def _plot_roc_binary(models_results: List[Dict]) -> go.Figure:
 
         color = colors[idx % len(colors)]
 
-        fig.add_trace(go.Scatter(
-            x=fpr, y=tpr,
-            mode='lines',
-            name=f'{name} (AUC = {roc_auc:.3f})',
-            line=dict(color=color, width=2)
-        ))
+        fig.add_trace(
+            go.Scatter(
+                x=fpr, y=tpr, mode="lines", name=f"{name} (AUC = {roc_auc:.3f})", line=dict(color=color, width=2)
+            )
+        )
 
     # Ligne de reference (random)
-    fig.add_trace(go.Scatter(
-        x=[0, 1], y=[0, 1],
-        mode='lines',
-        name='Random (AUC = 0.5)',
-        line=dict(color='gray', width=1, dash='dash')
-    ))
+    fig.add_trace(
+        go.Scatter(
+            x=[0, 1], y=[0, 1], mode="lines", name="Random (AUC = 0.5)", line=dict(color="gray", width=1, dash="dash")
+        )
+    )
 
     fig.update_layout(
-        title='Courbes ROC',
-        xaxis_title='Taux de Faux Positifs (FPR)',
-        yaxis_title='Taux de Vrais Positifs (TPR)',
+        title="Courbes ROC",
+        xaxis_title="Taux de Faux Positifs (FPR)",
+        yaxis_title="Taux de Vrais Positifs (TPR)",
         width=650,
         height=500,
         legend=dict(x=0.6, y=0.1),
         xaxis=dict(range=[0, 1]),
-        yaxis=dict(range=[0, 1.05])
+        yaxis=dict(range=[0, 1.05]),
     )
 
     return fig
 
 
-def _plot_roc_multiclass(
-    models_results: List[Dict],
-    class_labels: Optional[List[str]] = None
-) -> go.Figure:
+def _plot_roc_multiclass(models_results: List[Dict], class_labels: Optional[List[str]] = None) -> go.Figure:
     """Courbes ROC One-vs-Rest pour classification multiclasse."""
     n_models = len(models_results)
 
     fig = make_subplots(
-        rows=1, cols=n_models,
-        subplot_titles=[m['name'] for m in models_results],
-        horizontal_spacing=0.1
+        rows=1, cols=n_models, subplot_titles=[m["name"] for m in models_results], horizontal_spacing=0.1
     )
 
-    colors = ['#3498db', '#e74c3c', '#2ecc71', '#9b59b6', '#f39c12', '#1abc9c']
+    colors = ["#3498db", "#e74c3c", "#2ecc71", "#9b59b6", "#f39c12", "#1abc9c"]
 
     for model_idx, model in enumerate(models_results):
-        y_true = model['y_true']
-        y_proba = model['y_proba']
+        y_true = model["y_true"]
+        y_proba = model["y_proba"]
 
         classes = sorted(np.unique(y_true))
         n_classes = len(classes)
@@ -291,43 +284,41 @@ def _plot_roc_multiclass(
 
             fig.add_trace(
                 go.Scatter(
-                    x=fpr, y=tpr,
-                    mode='lines',
-                    name=f'{labels[class_idx]} (AUC={roc_auc:.2f})',
+                    x=fpr,
+                    y=tpr,
+                    mode="lines",
+                    name=f"{labels[class_idx]} (AUC={roc_auc:.2f})",
                     line=dict(color=color, width=2),
-                    showlegend=(model_idx == 0)  # Legende uniquement sur le premier
+                    showlegend=(model_idx == 0),  # Legende uniquement sur le premier
                 ),
-                row=1, col=model_idx + 1
+                row=1,
+                col=model_idx + 1,
             )
 
         # Ligne random
         fig.add_trace(
             go.Scatter(
-                x=[0, 1], y=[0, 1],
-                mode='lines',
-                line=dict(color='gray', width=1, dash='dash'),
-                showlegend=False
+                x=[0, 1], y=[0, 1], mode="lines", line=dict(color="gray", width=1, dash="dash"), showlegend=False
             ),
-            row=1, col=model_idx + 1
+            row=1,
+            col=model_idx + 1,
         )
 
     fig.update_layout(
-        title='Courbes ROC (One-vs-Rest)',
+        title="Courbes ROC (One-vs-Rest)",
         height=450,
         width=500 * n_models,
     )
 
     for i in range(n_models):
-        fig.update_xaxes(title_text="FPR", row=1, col=i+1, range=[0, 1])
-        fig.update_yaxes(title_text="TPR", row=1, col=i+1, range=[0, 1.05])
+        fig.update_xaxes(title_text="FPR", row=1, col=i + 1, range=[0, 1])
+        fig.update_yaxes(title_text="TPR", row=1, col=i + 1, range=[0, 1.05])
 
     return fig
 
 
 def _plot_metrics_comparison(
-    models_results: List[Dict],
-    metrics_to_show: Optional[List[str]] = None,
-    average: str = 'weighted'
+    models_results: List[Dict], metrics_to_show: Optional[List[str]] = None, average: str = "weighted"
 ) -> go.Figure:
     """
     Affiche un graphique en barres comparant les metriques de plusieurs modeles.
@@ -343,13 +334,8 @@ def _plot_metrics_comparison(
     # Calcul des metriques pour chaque modele
     all_metrics = []
     for model in models_results:
-        m = _compute_metrics(
-            model['y_true'],
-            model['y_pred'],
-            model.get('y_proba'),
-            average=average
-        )
-        m['name'] = model['name']
+        m = _compute_metrics(model["y_true"], model["y_pred"], model.get("y_proba"), average=average)
+        m["name"] = model["name"]
         all_metrics.append(m)
 
     df = pd.DataFrame(all_metrics)
@@ -357,49 +343,48 @@ def _plot_metrics_comparison(
     # Selection des metriques a afficher
     if metrics_to_show is None:
         # Metriques par defaut
-        metrics_to_show = ['accuracy', 'precision', 'recall', 'f1']
-        if 'roc_auc' in df.columns and df['roc_auc'].notna().any():
-            metrics_to_show.append('roc_auc')
-        if 'mcc' in df.columns:
-            metrics_to_show.append('mcc')
+        metrics_to_show = ["accuracy", "precision", "recall", "f1"]
+        if "roc_auc" in df.columns and df["roc_auc"].notna().any():
+            metrics_to_show.append("roc_auc")
+        if "mcc" in df.columns:
+            metrics_to_show.append("mcc")
 
     # Filtrer les metriques disponibles
     metrics_to_show = [m for m in metrics_to_show if m in df.columns]
 
-    colors = ['#3498db', '#e74c3c', '#2ecc71', '#9b59b6', '#f39c12', '#1abc9c']
+    colors = ["#3498db", "#e74c3c", "#2ecc71", "#9b59b6", "#f39c12", "#1abc9c"]
 
     fig = go.Figure()
 
     for idx, row in df.iterrows():
         values = [row[m] if pd.notna(row[m]) else 0 for m in metrics_to_show]
 
-        fig.add_trace(go.Bar(
-            name=row['name'],
-            x=metrics_to_show,
-            y=values,
-            text=[f"{v:.3f}" for v in values],
-            textposition='outside',
-            marker_color=colors[idx % len(colors)]
-        ))
+        fig.add_trace(
+            go.Bar(
+                name=row["name"],
+                x=metrics_to_show,
+                y=values,
+                text=[f"{v:.3f}" for v in values],
+                textposition="outside",
+                marker_color=colors[idx % len(colors)],
+            )
+        )
 
     fig.update_layout(
-        title='Comparaison des Metriques',
-        barmode='group',
+        title="Comparaison des Metriques",
+        barmode="group",
         height=450,
         width=max(600, 100 * len(metrics_to_show) * len(df)),
         yaxis_range=[0, 1.15],
-        xaxis_title='Metrique',
-        yaxis_title='Score',
-        legend=dict(orientation='h', y=1.1)
+        xaxis_title="Metrique",
+        yaxis_title="Score",
+        legend=dict(orientation="h", y=1.1),
     )
 
     return fig
 
 
-def _get_metrics_table(
-    models_results: List[Dict],
-    average: str = 'weighted'
-) -> pd.DataFrame:
+def _get_metrics_table(models_results: List[Dict], average: str = "weighted") -> pd.DataFrame:
     """
     Retourne un DataFrame avec toutes les metriques pour chaque modele.
 
@@ -413,20 +398,25 @@ def _get_metrics_table(
     all_metrics = []
 
     for model in models_results:
-        m = _compute_metrics(
-            model['y_true'],
-            model['y_pred'],
-            model.get('y_proba'),
-            average=average
-        )
-        m['model'] = model['name']
+        m = _compute_metrics(model["y_true"], model["y_pred"], model.get("y_proba"), average=average)
+        m["model"] = model["name"]
         all_metrics.append(m)
 
     df = pd.DataFrame(all_metrics)
 
     # Reordonner les colonnes
-    cols_order = ['model', 'accuracy', 'balanced_accuracy', 'precision',
-                  'recall', 'f1', 'roc_auc', 'mcc', 'specificity', 'sensitivity']
+    cols_order = [
+        "model",
+        "accuracy",
+        "balanced_accuracy",
+        "precision",
+        "recall",
+        "f1",
+        "roc_auc",
+        "mcc",
+        "specificity",
+        "sensitivity",
+    ]
     cols_order = [c for c in cols_order if c in df.columns]
 
     return df[cols_order].round(4)
@@ -439,8 +429,8 @@ def display_metrics(
     show_roc_curve: bool = True,
     show_bar_chart: bool = True,
     show_table: bool = True,
-    average: str = 'weighted',
-    normalize_cm: bool = True
+    average: str = "weighted",
+    normalize_cm: bool = True,
 ) -> Dict:
     """
     Affiche toutes les metriques pour un ou plusieurs modeles.
@@ -483,7 +473,7 @@ def display_metrics(
         raise ValueError("models_results ne peut pas etre vide")
 
     for m in models_results:
-        if 'name' not in m or 'y_true' not in m or 'y_pred' not in m:
+        if "name" not in m or "y_true" not in m or "y_pred" not in m:
             raise ValueError("Chaque modele doit avoir 'name', 'y_true', 'y_pred'")
 
     print("=" * 70)
@@ -502,19 +492,15 @@ def display_metrics(
     # 2. Graphique comparatif
     if show_bar_chart and len(models_results) > 0:
         fig_bar = _plot_metrics_comparison(models_results, average=average)
-        figures['bar_chart'] = fig_bar
+        figures["bar_chart"] = fig_bar
         fig_bar.show()
 
     # 3. Matrices de confusion
     if show_confusion_matrix:
         print("\n📈 MATRICES DE CONFUSION")
         print("-" * 70)
-        fig_cm = _plot_confusion_matrices(
-            models_results,
-            class_labels=class_labels,
-            normalize=normalize_cm
-        )
-        figures['confusion_matrices'] = fig_cm
+        fig_cm = _plot_confusion_matrices(models_results, class_labels=class_labels, normalize=normalize_cm)
+        figures["confusion_matrices"] = fig_cm
         fig_cm.show()
 
     # 4. Courbes ROC
@@ -523,7 +509,7 @@ def display_metrics(
         print("-" * 70)
         fig_roc = _plot_roc_curves(models_results, class_labels=class_labels)
         if fig_roc:
-            figures['roc_curves'] = fig_roc
+            figures["roc_curves"] = fig_roc
             fig_roc.show()
 
     # 5. Resume
@@ -532,21 +518,18 @@ def display_metrics(
     print("=" * 70)
 
     # Meilleur modele selon F1
-    best_idx = metrics_df['f1'].idxmax()
-    best_model = metrics_df.loc[best_idx, 'model']
-    best_f1 = metrics_df.loc[best_idx, 'f1']
+    best_idx = metrics_df["f1"].idxmax()
+    best_model = metrics_df.loc[best_idx, "model"]
+    best_f1 = metrics_df.loc[best_idx, "f1"]
 
     print(f"Meilleur modele (F1): {best_model} (F1 = {best_f1:.4f})")
 
-    if 'roc_auc' in metrics_df.columns and metrics_df['roc_auc'].notna().any():
-        best_auc_idx = metrics_df['roc_auc'].idxmax()
-        best_auc_model = metrics_df.loc[best_auc_idx, 'model']
-        best_auc = metrics_df.loc[best_auc_idx, 'roc_auc']
+    if "roc_auc" in metrics_df.columns and metrics_df["roc_auc"].notna().any():
+        best_auc_idx = metrics_df["roc_auc"].idxmax()
+        best_auc_model = metrics_df.loc[best_auc_idx, "model"]
+        best_auc = metrics_df.loc[best_auc_idx, "roc_auc"]
         print(f"Meilleur modele (AUC): {best_auc_model} (AUC = {best_auc:.4f})")
 
     print("=" * 70)
 
-    return {
-        'metrics_df': metrics_df,
-        'figures': figures
-    }
+    return {"metrics_df": metrics_df, "figures": figures}

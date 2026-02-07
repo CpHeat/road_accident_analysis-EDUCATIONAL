@@ -1,0 +1,50 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: trailing-whitespace
+        files: ^backend/
+      - id: end-of-file-fixer
+        files: ^backend/
+      - id: check-yaml
+        files: ^backend/
+      - id: check-added-large-files
+        files: ^backend/
+      - id: detect-private-key
+        files: ^backend/
+      - id: check-merge-conflict
+        files: ^backend/
+
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.15.0
+    hooks:
+      - id: ruff
+        files: ^backend/
+        args: [--fix]
+      - id: ruff-format
+        files: ^backend/
+
+  - repo: https://github.com/Yelp/detect-secrets
+    rev: v1.5.0
+    hooks:
+      - id: detect-secrets
+        files: ^backend/
+        args: ['--baseline', '.secrets.baseline']
+
+  - repo: local
+    hooks:
+      - id: mypy
+        name: mypy
+        entry: bash -c "cd backend && uv run mypy ."
+        language: system
+        types: [python]
+        files: ^backend/
+        pass_filenames: false
+
+      - id: pytest-check
+        name: pytest-check
+        entry: bash -c "cd backend && uv run pytest tests"
+        language: system
+        types: [python]
+        files: ^backend/
+        pass_filenames: false

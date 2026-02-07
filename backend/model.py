@@ -12,9 +12,15 @@ MODEL_PATH = Path(__file__).parent / "models" / "model_accident_binary_optimized
 
 # Features dans l'ordre attendu par le modèle
 FEATURE_ORDER = [
-    "est_nuit", "est_heure_pointe", "jour_semaine", "est_weekend",
-    "agg", "vma",
-    "impl_vehicule_leger", "impl_poids_lourd", "impl_pieton"
+    "est_nuit",
+    "est_heure_pointe",
+    "jour_semaine",
+    "est_weekend",
+    "agg",
+    "vma",
+    "impl_vehicule_leger",
+    "impl_poids_lourd",
+    "impl_pieton",
 ]
 
 # Variables globales pour le pipeline
@@ -23,7 +29,7 @@ _imputer = None
 _scaler = None
 
 
-def load_model():
+def load_model() -> None:
     """Charge le modèle et les transformateurs depuis le fichier joblib."""
     global _model, _imputer, _scaler
 
@@ -38,7 +44,7 @@ def load_model():
     _scaler = data.get("scaler")
 
 
-def get_pipeline():
+def get_pipeline() -> tuple:
     """Retourne le pipeline complet (model, imputer, scaler)."""
     if _model is None:
         load_model()
