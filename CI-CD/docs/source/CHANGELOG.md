@@ -2,6 +2,47 @@
 
 <!-- version list -->
 
+## v1.0.1-beta.2 (2026-02-07)
+
+### Bug Fixes
+
+- Added tests
+  ([`4c4df6c`](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/commit/4c4df6c46d4bad4d51671a6836d834bc521b41f9))
+
+- Added tests
+  ([`7e195e6`](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/commit/7e195e6dd87dcff59775be0dd76cb2c7b57f3c05))
+
+- Build action
+  ([`4c4df6c`](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/commit/4c4df6c46d4bad4d51671a6836d834bc521b41f9))
+
+- Build action
+  ([`7e195e6`](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/commit/7e195e6dd87dcff59775be0dd76cb2c7b57f3c05))
+
+- Exclude .secrets.baseline from gitleaks
+  ([`4c4df6c`](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/commit/4c4df6c46d4bad4d51671a6836d834bc521b41f9))
+
+- Exclude .secrets.baseline from gitleaks
+  ([`7e195e6`](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/commit/7e195e6dd87dcff59775be0dd76cb2c7b57f3c05))
+
+- Linting and gitleaks configuration
+  ([`4c4df6c`](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/commit/4c4df6c46d4bad4d51671a6836d834bc521b41f9))
+
+- Linting and gitleaks configuration
+  ([`7e195e6`](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/commit/7e195e6dd87dcff59775be0dd76cb2c7b57f3c05))
+
+- Pre-commit implemented
+  ([`4c4df6c`](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/commit/4c4df6c46d4bad4d51671a6836d834bc521b41f9))
+
+- Pre-commit implemented
+  ([`7e195e6`](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/commit/7e195e6dd87dcff59775be0dd76cb2c7b57f3c05))
+
+- Security action fixed (.venv exclusion)
+  ([`4c4df6c`](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/commit/4c4df6c46d4bad4d51671a6836d834bc521b41f9))
+
+- Security action fixed (.venv exclusion)
+  ([`7e195e6`](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/commit/7e195e6dd87dcff59775be0dd76cb2c7b57f3c05))
+
+
 ## v1.0.1-beta.1 (2026-02-07)
 
 ### Bug Fixes
