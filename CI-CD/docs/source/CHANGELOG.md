@@ -2,6 +2,29 @@
 
 <!-- version list -->
 
+## v1.0.1-beta.6 (2026-02-07)
+
+### Bug Fixes
+
+- Added tests
+  ([`6347eff`](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/commit/6347effd8df3c149d676fe050360f62b73422cb6))
+
+- Build action
+  ([`6347eff`](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/commit/6347effd8df3c149d676fe050360f62b73422cb6))
+
+- Exclude .secrets.baseline from gitleaks
+  ([`6347eff`](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/commit/6347effd8df3c149d676fe050360f62b73422cb6))
+
+- Linting and gitleaks configuration
+  ([`6347eff`](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/commit/6347effd8df3c149d676fe050360f62b73422cb6))
+
+- Pre-commit implemented
+  ([`6347eff`](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/commit/6347effd8df3c149d676fe050360f62b73422cb6))
+
+- Security action fixed (.venv exclusion)
+  ([`6347eff`](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/commit/6347effd8df3c149d676fe050360f62b73422cb6))
+
+
 ## v1.0.1-beta.5 (2026-02-07)
 
 ### Features
