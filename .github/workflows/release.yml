@@ -2,7 +2,7 @@ name: Release
 
 on:
   workflow_run:
-    workflows: ["Tests"]
+    workflows: ["Test"]
     types:
       - completed
     branches:
@@ -17,27 +17,22 @@ permissions:
 
 jobs:
   release:
-    # Ne s'exécute que si la CI a réussi
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
+        with:
+          fetch-depth: 0
 
       - name: Set up uv
-        uses: 
+        uses: astral-sh/setup-uv@v7
 
       - name: Install dependencies
-        run: 
+        run: uv sync
 
       - name: Python Semantic Release
-        id: release
-        uses: 
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Publish to GHCR (if new release)
-        if:steps.release.outputs.released == 'true'
-        run: 
+        run: uv run semantic-release version
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
