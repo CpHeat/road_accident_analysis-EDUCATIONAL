@@ -66,6 +66,11 @@ match = "^(feat|fix|perf)/.+"
 prerelease = true
 prerelease_token = "alpha"
 
+[tool.semantic_release.branches.beta]
+match = "develop"
+prerelease = true
+prerelease_token = "beta"
+
 [tool.semantic_release.changelog]
 exclude_commit_patterns = [
     '''chore(?:\([^)]*?\))?: .+''',
