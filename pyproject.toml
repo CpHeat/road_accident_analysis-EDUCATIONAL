@@ -1,6 +1,6 @@
 [project]
 name = "rendu"
-version = "1.1.0-beta.1"
+version = "1.1.0"
 description = "CI/CD Project"
 readme = "README.md"
 requires-python = ">=3.14"

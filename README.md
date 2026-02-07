@@ -29,4 +29,4 @@ Décomposition du docker-compose.yml :
 Les images sont taggées directement dans docker compose
 pour push l'image du backend sur dockerhub j'utilise par exemple docker push cpheat/accident-ml-backend:1.0.3 (si la version que j'ai build via docker compose est la 1.0.3)
 
-test-fix
+test patch
