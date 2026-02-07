@@ -6,9 +6,9 @@ on:
 jobs:
   release:
     runs-on: ubuntu-latest
-    outputs:                                                                                                                                                                                                                                                           
-      released: ${{ steps.release.outputs.released }}                                                                                                                                                                                                                  
-      version: ${{ steps.release.outputs.version }}
+    outputs:
+      released: ${{ steps.release.outputs.released || 'false' }}
+      version: ${{ steps.next-version.outputs.version }}
 
     steps:
       - name: Checkout code
@@ -22,19 +22,26 @@ jobs:
       - name: Install dependencies
         run: uv sync
 
+      - name: Get next version
+        id: next-version
+        run: |
+          version=$(uv run semantic-release version --print 2>&1 | tail -1)
+          echo "version=$version" >> $GITHUB_OUTPUT
+          if [ -z "$version" ] || echo "$version" | grep -q "No release"; then
+            echo "will_release=false" >> $GITHUB_OUTPUT
+          else
+            echo "will_release=true" >> $GITHUB_OUTPUT
+          fi
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Python Semantic Release
         id: release
+        if: steps.next-version.outputs.will_release == 'true'
         run: |
-          output=$(uv run semantic-release version 2>&1) || true                                                                                                                                                                                                       
-          echo "$output"                                                                                                                                                                                                                                               
-                                                                                                                                                                                                                                                                       
-          if echo "$output" | grep -q "No release will be made"; then                                                                                                                                                                                                  
-            echo "released=false" >> $GITHUB_OUTPUT                                                                                                                                                                                                                    
-          else                                                                                                                                                                                                                                                         
-            version=$(uv run semantic-release version --print 2>/dev/null | tail -1)                                                                                                                                                                                   
-            echo "released=true" >> $GITHUB_OUTPUT                                                                                                                                                                                                                     
-            echo "version=$version" >> $GITHUB_OUTPUT                                                                                                                                                                                                                  
-          fi
+          uv run semantic-release version
+          echo "released=true" >> $GITHUB_OUTPUT
+          echo "version=${{ steps.next-version.outputs.version }}" >> $GITHUB_OUTPUT
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
