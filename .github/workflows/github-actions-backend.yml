@@ -82,7 +82,7 @@ jobs:
       - name: Install dependencies
         run: uv sync --group dev
       - name: security check
-        run: uv run bandit -r .
+        run: uv run bandit -r . -c pyproject.toml
       - name: Safety check
         run: uv run safety check
 
