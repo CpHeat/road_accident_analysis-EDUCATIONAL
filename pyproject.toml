@@ -1,6 +1,6 @@
 [project]
 name = "rendu"
-version = "1.0.0-alpha.1"
+version = "1.0.1-alpha.1"
 description = "CI/CD Project"
 readme = "README.md"
 requires-python = ">=3.14"
@@ -80,6 +80,10 @@ mode = "update"
 insertion_flag = "<!-- version list -->"
 template_dir = "templates"
 
+##############################################################################################
+#################################### SEMANTIC RELEASE ########################################
+##############################################################################################
+
 [tool.semantic_release.changelog.default_templates]
 changelog_file = "CI-CD/docs/source/CHANGELOG.md"
 output_format = "md"
@@ -115,6 +119,7 @@ ignore_merge_commits = true
 [tool.semantic_release.remote]
 name = "origin"
 type = "github"
+token = { env = "GH_TOKEN" }
 ignore_token_for_push = false
 insecure = false
 
