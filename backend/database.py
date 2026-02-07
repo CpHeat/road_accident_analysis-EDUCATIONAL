@@ -11,7 +11,7 @@ POSTGRES_PORT = os.getenv("POSTGRES_PORT", "5432")
 POSTGRES_DB = os.getenv("POSTGRES_DB", "accidents")
 
 if not POSTGRES_USER or not POSTGRES_PASSWORD:
-    raise ValueError("DATABASE_URL or POSTGRES_USER and POSTGRES_PASSWORD must be set")
+    raise ValueError("POSTGRES_USER and POSTGRES_PASSWORD must be set")
 DATABASE_URL = f"postgresql+asyncpg://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_HOST}:{POSTGRES_PORT}/{POSTGRES_DB}"
 
 

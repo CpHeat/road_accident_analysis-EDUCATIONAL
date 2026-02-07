@@ -1,0 +1,54 @@
+name: Release
+
+on:
+  workflow_call:
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    outputs:
+      released: ${{ steps.release.outputs.released || 'false' }}
+      version: ${{ steps.next-version.outputs.version }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v7
+
+      - name: Install dependencies
+        run: uv sync
+
+      - name: Get next version
+        id: next-version
+        run: |
+          version=$(uv run semantic-release version --print 2>&1 | tail -1)
+          echo "version=$version" >> $GITHUB_OUTPUT
+          if [ -z "$version" ] || echo "$version" | grep -qi "no release"; then
+            echo "will_release=false" >> $GITHUB_OUTPUT
+          else
+            echo "will_release=true" >> $GITHUB_OUTPUT
+          fi
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Python Semantic Release
+        id: release
+        if: steps.next-version.outputs.will_release == 'true'
+        run: |
+          uv run semantic-release version
+          echo "released=true" >> $GITHUB_OUTPUT
+          echo "version=${{ steps.next-version.outputs.version }}" >> $GITHUB_OUTPUT
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  build:
+    needs: release
+    if: ${{ needs.release.outputs.released == 'true' }}
+    uses: ./.github/workflows/build.yml
+    with:
+      version: ${{ needs.release.outputs.version }}
+    secrets: inherit

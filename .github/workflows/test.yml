@@ -1,13 +1,16 @@
-name: Python application
+name: Test
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: [ main, develop, 'feat/*', 'fix/*' ]
   pull_request:
     branches: [ main, develop ]
 
 permissions:
-  contents: read
+  contents: write
+  packages: write
+  issues: write
+  pull-requests: write
 
 jobs:
 
@@ -116,3 +119,9 @@ jobs:
         run: uv sync --group dev
       - name: Run tests
         run: uv run pytest --cov=. --cov-report=term --cov-report=xml
+
+  release:
+    needs: [pre-commit, lint, typecheck, security, tests]
+    if: github.event_name == 'push'
+    uses: ./.github/workflows/release.yml
+    secrets: inherit
