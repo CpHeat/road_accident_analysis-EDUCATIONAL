@@ -1,8 +1,8 @@
-commit sur feat/fix/.. : pre-commit check ---------------- OK
+commit sur feat/fix/.. : pre-commit check -------------------- OK
 
-PR créée sur dev : TESTS --------------------------------- OK
+PR créée sur dev : TESTS ------------------------------------- OK
 
-PR validée sur dev : Release -----------------------------
+PR validée sur dev : Release + Build si nouvelle version -----  
 
 PR créée sur main : TESTS --------------------------------
 

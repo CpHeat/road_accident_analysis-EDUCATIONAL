@@ -36,21 +36,28 @@ jobs:
       - name: Get next version
         id: next-version
         run: |
-          echo "=== Debug: Running semantic-release version --print ==="
+          echo "=== Running semantic-release version --print ==="
           uv run semantic-release version --print 2>&1 | tee /tmp/sr-output.txt || true
-          echo "=== Debug: Full output above ==="
+          echo "=== Full output above ==="
 
-          # Get only the version line (should be a semver pattern)
-          version=$(grep -E '^[0-9]+\.[0-9]+\.[0-9]+' /tmp/sr-output.txt | tail -1 || echo "")
-          echo "=== Debug: Extracted version: '$version' ==="
-
-          echo "version=$version" >> $GITHUB_OUTPUT
-          if [ -z "$version" ]; then
+          # Check if already released or no release needed
+          if grep -qi "already been released\|no release will be made" /tmp/sr-output.txt; then
+            echo "=== Version already released, skipping ==="
             echo "will_release=false" >> $GITHUB_OUTPUT
-            echo "=== No release will be created ==="
+            echo "version=" >> $GITHUB_OUTPUT
           else
-            echo "will_release=true" >> $GITHUB_OUTPUT
-            echo "=== Will release version: $version ==="
+            # Get only the version line (should be a semver pattern)
+            version=$(grep -E '^[0-9]+\.[0-9]+\.[0-9]+' /tmp/sr-output.txt | tail -1 || echo "")
+            echo "=== Extracted version: '$version' ==="
+            echo "version=$version" >> $GITHUB_OUTPUT
+
+            if [ -z "$version" ]; then
+              echo "will_release=false" >> $GITHUB_OUTPUT
+              echo "=== No release will be created ==="
+            else
+              echo "will_release=true" >> $GITHUB_OUTPUT
+              echo "=== Will release version: $version ==="
+            fi
           fi
         env:
           GH_TOKEN: ${{ secrets.RELEASE_TOKEN }}
