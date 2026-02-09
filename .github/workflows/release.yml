@@ -36,12 +36,21 @@ jobs:
       - name: Get next version
         id: next-version
         run: |
-          version=$(uv run semantic-release version --print 2>&1 | tail -1)
+          echo "=== Debug: Running semantic-release version --print ==="
+          uv run semantic-release version --print 2>&1 | tee /tmp/sr-output.txt || true
+          echo "=== Debug: Full output above ==="
+
+          # Get only the version line (should be a semver pattern)
+          version=$(grep -E '^[0-9]+\.[0-9]+\.[0-9]+' /tmp/sr-output.txt | tail -1 || echo "")
+          echo "=== Debug: Extracted version: '$version' ==="
+
           echo "version=$version" >> $GITHUB_OUTPUT
-          if [ -z "$version" ] || echo "$version" | grep -qi "no release"; then
+          if [ -z "$version" ]; then
             echo "will_release=false" >> $GITHUB_OUTPUT
+            echo "=== No release will be created ==="
           else
             echo "will_release=true" >> $GITHUB_OUTPUT
+            echo "=== Will release version: $version ==="
           fi
         env:
           GH_TOKEN: ${{ secrets.RELEASE_TOKEN }}
