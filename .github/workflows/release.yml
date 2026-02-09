@@ -1,7 +1,11 @@
 name: Release
 
 on:
-  workflow_call:
+  push:
+    branches: [ main, develop ]
+
+# on:
+#   workflow_call:
 
 jobs:
   release:
@@ -53,3 +57,22 @@ jobs:
     with:
       version: ${{ needs.release.outputs.version }}
     secrets: inherit
+
+  sync-develop:
+    needs: release
+    if: ${{ github.ref == 'refs/heads/main' && needs.release.outputs.released == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.RELEASE_TOKEN }}
+
+      - name: Sync main → develop
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout develop
+          git merge main --no-edit -m "chore: sync main into develop after release ${{ needs.release.outputs.version }}"
+          git push origin develop

@@ -120,8 +120,8 @@ jobs:
       - name: Run tests
         run: uv run pytest --cov=. --cov-report=term --cov-report=xml
 
-  release:
-    needs: [pre-commit, lint, typecheck, security, tests]
-    if: github.event_name == 'push'
-    uses: ./.github/workflows/release.yml
-    secrets: inherit
+  # release:
+  #   needs: [pre-commit, lint, typecheck, security, tests]
+  #   if: github.event_name == 'push'
+  #   uses: ./.github/workflows/release.yml
+  #   secrets: inherit

@@ -2,47 +2,6 @@
 
 <!-- version list -->
 
-## v1.3.0-beta.1 (2026-02-07)
-
-
-## v1.2.0 (2026-02-07)
-
-### Bug Fixes
-
-- Added tests ([#45](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/pull/45),
-  [`dce4dc3`](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/commit/dce4dc32b2369f3c2366630487628e32e8be0c0c))
-
-- Build action ([#45](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/pull/45),
-  [`dce4dc3`](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/commit/dce4dc32b2369f3c2366630487628e32e8be0c0c))
-
-- Exclude .secrets.baseline from gitleaks
-  ([#45](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/pull/45),
-  [`dce4dc3`](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/commit/dce4dc32b2369f3c2366630487628e32e8be0c0c))
-
-- Linting and gitleaks configuration
-  ([#45](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/pull/45),
-  [`dce4dc3`](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/commit/dce4dc32b2369f3c2366630487628e32e8be0c0c))
-
-- Pre-commit implemented
-  ([#45](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/pull/45),
-  [`dce4dc3`](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/commit/dce4dc32b2369f3c2366630487628e32e8be0c0c))
-
-- Security action fixed (.venv exclusion)
-  ([#45](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/pull/45),
-  [`dce4dc3`](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/commit/dce4dc32b2369f3c2366630487628e32e8be0c0c))
-
-- Test fix ([#45](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/pull/45),
-  [`dce4dc3`](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/commit/dce4dc32b2369f3c2366630487628e32e8be0c0c))
-
-- Test patch bump ([#45](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/pull/45),
-  [`dce4dc3`](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/commit/dce4dc32b2369f3c2366630487628e32e8be0c0c))
-
-### Features
-
-- Workflow finalize ([#45](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/pull/45),
-  [`dce4dc3`](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/commit/dce4dc32b2369f3c2366630487628e32e8be0c0c))
-
-
 ## v1.1.0 (2026-02-07)
 
 ### Bug Fixes
