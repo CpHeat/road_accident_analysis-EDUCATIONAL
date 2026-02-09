@@ -2,6 +2,50 @@
 
 <!-- version list -->
 
+## v1.3.0-beta.2 (2026-02-09)
+
+### Bug Fixes
+
+- Optimize workflow ([#52](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/pull/52),
+  [`323fe98`](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/commit/323fe98215a735db750831360eb9cb2db73af6fa))
+
+- Optimize workflow ([#51](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/pull/51),
+  [`010f159`](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/commit/010f159385a70d6613013fcb2b218e147982b9e0))
+
+- Optimize workflow ([#50](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/pull/50),
+  [`65a046e`](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/commit/65a046eb7afbfcce5643693e7559b54fe32a925b))
+
+- Optimize workflow ([#49](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/pull/49),
+  [`21833cf`](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/commit/21833cfa246b8fac3793a6a02616af79787074de))
+
+- Optimize workflow ([#48](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/pull/48),
+  [`e7951de`](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/commit/e7951dedb5b44ecb052a756685965febc84f5461))
+
+- Optimize workflow 2 ([#52](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/pull/52),
+  [`323fe98`](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/commit/323fe98215a735db750831360eb9cb2db73af6fa))
+
+- Optimize workflow 2 ([#51](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/pull/51),
+  [`010f159`](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/commit/010f159385a70d6613013fcb2b218e147982b9e0))
+
+- Optimize workflow 2 ([#50](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/pull/50),
+  [`65a046e`](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/commit/65a046eb7afbfcce5643693e7559b54fe32a925b))
+
+- Test patch bump ([#52](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/pull/52),
+  [`323fe98`](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/commit/323fe98215a735db750831360eb9cb2db73af6fa))
+
+- Test patch bump ([#51](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/pull/51),
+  [`010f159`](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/commit/010f159385a70d6613013fcb2b218e147982b9e0))
+
+- Test patch bump ([#50](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/pull/50),
+  [`65a046e`](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/commit/65a046eb7afbfcce5643693e7559b54fe32a925b))
+
+- Test patch bump ([#49](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/pull/49),
+  [`21833cf`](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/commit/21833cfa246b8fac3793a6a02616af79787074de))
+
+- Test patch bump ([#48](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/pull/48),
+  [`e7951de`](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/commit/e7951dedb5b44ecb052a756685965febc84f5461))
+
+
 ## v1.1.0 (2026-02-07)
 
 ### Bug Fixes
