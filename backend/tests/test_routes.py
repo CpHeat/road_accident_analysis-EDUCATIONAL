@@ -56,7 +56,7 @@ class TestPredictEndpoint:
 
         mock_db_session.refresh = mock_refresh
 
-        with patch("features._get_sun_times", new_callable=AsyncMock) as mock_sun:
+        with patch("services.feature_service._get_sun_times", new_callable=AsyncMock) as mock_sun:
             from datetime import time
 
             mock_sun.return_value = {"sunrise": time(6, 0), "sunset": time(21, 0)}
@@ -133,7 +133,7 @@ class TestPredictEndpoint:
         """POST /predict avec département invalide retourne 400."""
         valid_accident_input["departement"] = "999"
 
-        with patch("features._get_sun_times", new_callable=AsyncMock):
+        with patch("services.feature_service._get_sun_times", new_callable=AsyncMock):
             response = await async_client.post("/predict", json=valid_accident_input)
 
         assert response.status_code == 400

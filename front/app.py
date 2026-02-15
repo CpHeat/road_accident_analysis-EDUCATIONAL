@@ -1,21 +1,9 @@
 """Dashboard Streamlit pour la prédiction d'accidents routiers."""
 
-import requests
-import os
-
 import streamlit as st
-
+from controllers.prediction import handle_prediction
 from styles import CSS, Layout
-from components import (
-    render_prediction_form,
-    render_result,
-    render_empty_state,
-    render_error,
-    render_warning,
-)
-
-API_URL = os.getenv("API_URL", "http://localhost:8000")
-
+from views import render_prediction_form
 
 # Configuration page
 st.set_page_config(
@@ -40,27 +28,7 @@ with col_form:
     form_data, submitted = render_prediction_form()
 
 with col_result:
-    st.subheader("📊 Résultat")
-
-    if submitted:
-        if not form_data.is_valid():
-            render_warning("Veuillez sélectionner un département.")
-        else:
-            payload = form_data.to_payload()
-
-            with st.spinner("Analyse en cours..."):
-                try:
-                    response = requests.post(f"{API_URL}/predict", json=payload, timeout=10)
-                    response.raise_for_status()
-                    result = response.json()
-                    render_result(result, payload)
-
-                except requests.exceptions.ConnectionError:
-                    render_error("Impossible de se connecter à l'API. Vérifiez que le backend est lancé.")
-                except requests.exceptions.RequestException as e:
-                    render_error(f"Erreur : {str(e)}")
-    else:
-        render_empty_state()
+    handle_prediction(form_data, submitted)
 
 # Footer
 st.divider()

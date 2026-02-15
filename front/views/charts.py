@@ -1,7 +1,6 @@
 """Composants graphiques."""
 
 import plotly.graph_objects as go
-
 from styles import Colors, GaugeConfig, Layout
 
 

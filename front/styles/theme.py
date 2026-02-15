@@ -36,7 +36,7 @@ class Layout:
 
     FORM_RATIO = 1
     RESULT_RATIO = 1.5
-    GAUGE_MARGIN = dict(l=30, r=30, t=60, b=30)
+    GAUGE_MARGIN = {"l": 30, "r": 30, "t": 60, "b": 30}
 
 
 CSS = """

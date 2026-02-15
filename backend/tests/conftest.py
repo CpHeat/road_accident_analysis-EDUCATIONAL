@@ -115,7 +115,11 @@ def test_client(mock_db_session: AsyncMock, mock_model: MagicMock) -> Iterator[T
         app.dependency_overrides[get_db] = override_get_db
 
         # Mock du modèle
-        with patch("model._model", mock_model), patch("model._imputer", None), patch("model._scaler", None):
+        with (
+            patch("services.ml_service._model", mock_model),
+            patch("services.ml_service._imputer", None),
+            patch("services.ml_service._scaler", None),
+        ):
             yield TestClient(app)
 
         app.dependency_overrides.clear()
@@ -138,7 +142,11 @@ async def async_client(mock_db_session: AsyncMock, mock_model: MagicMock) -> Asy
 
         app.dependency_overrides[get_db] = override_get_db
 
-        with patch("model._model", mock_model), patch("model._imputer", None), patch("model._scaler", None):
+        with (
+            patch("services.ml_service._model", mock_model),
+            patch("services.ml_service._imputer", None),
+            patch("services.ml_service._scaler", None),
+        ):
             transport = ASGITransport(app=app)
             async with AsyncClient(transport=transport, base_url="http://test") as client:
                 yield client
