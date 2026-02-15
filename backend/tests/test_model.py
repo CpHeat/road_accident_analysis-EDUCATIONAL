@@ -9,7 +9,7 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from model import FEATURE_ORDER, predict
+from services.ml_service import FEATURE_ORDER, predict
 
 
 class TestFeatureOrder:
@@ -43,7 +43,11 @@ class TestPredict:
         mock_model.predict.return_value = [0]
         mock_model.predict_proba.return_value = [[0.75, 0.25]]
 
-        with patch("model._model", mock_model), patch("model._imputer", None), patch("model._scaler", None):
+        with (
+            patch("services.ml_service._model", mock_model),
+            patch("services.ml_service._imputer", None),
+            patch("services.ml_service._scaler", None),
+        ):
             result = predict(valid_features)
 
         assert result["gravite"] == 0
@@ -55,7 +59,11 @@ class TestPredict:
         mock_model.predict.return_value = [1]
         mock_model.predict_proba.return_value = [[0.20, 0.80]]
 
-        with patch("model._model", mock_model), patch("model._imputer", None), patch("model._scaler", None):
+        with (
+            patch("services.ml_service._model", mock_model),
+            patch("services.ml_service._imputer", None),
+            patch("services.ml_service._scaler", None),
+        ):
             result = predict(valid_features)
 
         assert result["gravite"] == 1
@@ -67,7 +75,11 @@ class TestPredict:
         mock_model.predict.return_value = [0]
         mock_model.predict_proba.return_value = [[0.765432, 0.234568]]
 
-        with patch("model._model", mock_model), patch("model._imputer", None), patch("model._scaler", None):
+        with (
+            patch("services.ml_service._model", mock_model),
+            patch("services.ml_service._imputer", None),
+            patch("services.ml_service._scaler", None),
+        ):
             result = predict(valid_features)
 
         assert result["probabilite_grave"] == 0.2346
@@ -87,9 +99,9 @@ class TestPredict:
         mock_scaler.transform.return_value = np.array([[0.0, 1.0, 0.5, 1.0, 1.0, 0.4, 1.0, 0.0, 0.0]])
 
         with (
-            patch("model._model", mock_model),
-            patch("model._imputer", mock_imputer),
-            patch("model._scaler", mock_scaler),
+            patch("services.ml_service._model", mock_model),
+            patch("services.ml_service._imputer", mock_imputer),
+            patch("services.ml_service._scaler", mock_scaler),
         ):
             result = predict(valid_features)
 
@@ -103,7 +115,11 @@ class TestPredict:
         mock_model.predict.return_value = [1]
         del mock_model.predict_proba
 
-        with patch("model._model", mock_model), patch("model._imputer", None), patch("model._scaler", None):
+        with (
+            patch("services.ml_service._model", mock_model),
+            patch("services.ml_service._imputer", None),
+            patch("services.ml_service._scaler", None),
+        ):
             result = predict(valid_features)
 
         assert result["gravite"] == 1
@@ -115,7 +131,11 @@ class TestPredict:
         mock_model.predict.return_value = [0]
         mock_model.predict_proba.return_value = [[0.70, 0.30]]
 
-        with patch("model._model", mock_model), patch("model._imputer", None), patch("model._scaler", None):
+        with (
+            patch("services.ml_service._model", mock_model),
+            patch("services.ml_service._imputer", None),
+            patch("services.ml_service._scaler", None),
+        ):
             result = predict(valid_features)
 
         assert set(result.keys()) == {"gravite", "probabilite_grave", "label"}
@@ -128,30 +148,37 @@ class TestLoadModel:
         """FileNotFoundError si modèle inexistant."""
         from pathlib import Path
 
-        from model import load_model
+        from services.ml_service import load_model
 
         fake_path = MagicMock(spec=Path)
         fake_path.exists.return_value = False
 
-        with patch("model.MODEL_PATH", fake_path):
+        with patch("services.ml_service.MODEL_PATH", fake_path):
             with pytest.raises(FileNotFoundError):
                 load_model()
 
     def test_load_model_success(self) -> None:
         """Chargement réussi du modèle."""
-        from model import load_model
+        from services.ml_service import load_model
 
         mock_model = MagicMock()
         mock_data = {"model": mock_model, "imputer": None, "scaler": None}
 
-        with patch("model.MODEL_PATH") as mock_path, patch("model.joblib.load", return_value=mock_data):
+        with (
+            patch("services.ml_service.MODEL_PATH") as mock_path,
+            patch("services.ml_service.joblib.load", return_value=mock_data),
+        ):
             mock_path.exists.return_value = True
 
             load_model()
 
         # Vérifie que le modèle est chargé (via get_pipeline)
-        from model import get_pipeline
+        from services.ml_service import get_pipeline
 
-        with patch("model._model", mock_model), patch("model._imputer", None), patch("model._scaler", None):
+        with (
+            patch("services.ml_service._model", mock_model),
+            patch("services.ml_service._imputer", None),
+            patch("services.ml_service._scaler", None),
+        ):
             model, imputer, scaler = get_pipeline()
             assert model is mock_model
