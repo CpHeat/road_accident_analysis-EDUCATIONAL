@@ -1,7 +1,17 @@
 name: Release
 
 on:
-  workflow_call:
+  push:
+    branches: [ main, develop ]
+
+# on:
+#   workflow_call:
+
+permissions:
+  contents: write
+  packages: write
+  issues: write
+  pull-requests: write
 
 jobs:
   release:
@@ -26,12 +36,28 @@ jobs:
       - name: Get next version
         id: next-version
         run: |
-          version=$(uv run semantic-release version --print 2>&1 | tail -1)
-          echo "version=$version" >> $GITHUB_OUTPUT
-          if [ -z "$version" ] || echo "$version" | grep -qi "no release"; then
+          echo "=== Running semantic-release version --print ==="
+          uv run semantic-release version --print 2>&1 | tee /tmp/sr-output.txt || true
+          echo "=== Full output above ==="
+
+          # Check if already released or no release needed
+          if grep -qi "already been released\|no release will be made" /tmp/sr-output.txt; then
+            echo "=== Version already released, skipping ==="
             echo "will_release=false" >> $GITHUB_OUTPUT
+            echo "version=" >> $GITHUB_OUTPUT
           else
-            echo "will_release=true" >> $GITHUB_OUTPUT
+            # Get only the version line (should be a semver pattern)
+            version=$(grep -E '^[0-9]+\.[0-9]+\.[0-9]+' /tmp/sr-output.txt | tail -1 || echo "")
+            echo "=== Extracted version: '$version' ==="
+            echo "version=$version" >> $GITHUB_OUTPUT
+
+            if [ -z "$version" ]; then
+              echo "will_release=false" >> $GITHUB_OUTPUT
+              echo "=== No release will be created ==="
+            else
+              echo "will_release=true" >> $GITHUB_OUTPUT
+              echo "=== Will release version: $version ==="
+            fi
           fi
         env:
           GH_TOKEN: ${{ secrets.RELEASE_TOKEN }}
@@ -53,3 +79,22 @@ jobs:
     with:
       version: ${{ needs.release.outputs.version }}
     secrets: inherit
+
+  sync-develop:
+    needs: release
+    if: ${{ github.ref == 'refs/heads/main' && needs.release.outputs.released == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.RELEASE_TOKEN }}
+
+      - name: Sync main → develop
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout develop
+          git merge main --no-edit -m "chore: sync main into develop after release ${{ needs.release.outputs.version }}"
+          git push origin develop

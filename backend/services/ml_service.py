@@ -8,7 +8,7 @@ import pandas as pd
 logger = logging.getLogger(__name__)
 
 # Chemin vers le modèle
-MODEL_PATH = Path(__file__).parent / "models" / "model_accident_binary_optimized.joblib"
+MODEL_PATH = Path(__file__).parent.parent / "ml_models" / "model_accident_binary_optimized.joblib"
 
 # Features dans l'ordre attendu par le modèle
 FEATURE_ORDER = [

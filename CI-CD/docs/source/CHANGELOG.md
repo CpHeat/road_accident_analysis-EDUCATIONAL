@@ -2,50 +2,65 @@
 
 <!-- version list -->
 
-## v1.2.1 (2026-02-07)
+## v1.3.0-beta.4 (2026-02-15)
+
+
+## v1.3.0-beta.3 (2026-02-15)
 
 ### Bug Fixes
 
-- Test ([#47](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/pull/47),
-  [`66a4824`](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/commit/66a48241ba6d1a0c29c72afc1259fef17abd889a))
+- Optimize workflow ([#56](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/pull/56),
+  [`2072fcd`](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/commit/2072fcda2251d29dc2e737e7d37257008a045fc1))
+
+- Optimize workflow 2 ([#56](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/pull/56),
+  [`2072fcd`](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/commit/2072fcda2251d29dc2e737e7d37257008a045fc1))
+
+- Test patch bump ([#56](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/pull/56),
+  [`2072fcd`](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/commit/2072fcda2251d29dc2e737e7d37257008a045fc1))
 
 
-## v1.2.0 (2026-02-07)
+## v1.3.0-beta.2 (2026-02-09)
 
 ### Bug Fixes
 
-- Added tests ([#45](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/pull/45),
-  [`dce4dc3`](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/commit/dce4dc32b2369f3c2366630487628e32e8be0c0c))
+- Optimize workflow ([#52](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/pull/52),
+  [`323fe98`](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/commit/323fe98215a735db750831360eb9cb2db73af6fa))
 
-- Build action ([#45](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/pull/45),
-  [`dce4dc3`](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/commit/dce4dc32b2369f3c2366630487628e32e8be0c0c))
+- Optimize workflow ([#51](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/pull/51),
+  [`010f159`](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/commit/010f159385a70d6613013fcb2b218e147982b9e0))
 
-- Exclude .secrets.baseline from gitleaks
-  ([#45](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/pull/45),
-  [`dce4dc3`](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/commit/dce4dc32b2369f3c2366630487628e32e8be0c0c))
+- Optimize workflow ([#50](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/pull/50),
+  [`65a046e`](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/commit/65a046eb7afbfcce5643693e7559b54fe32a925b))
 
-- Linting and gitleaks configuration
-  ([#45](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/pull/45),
-  [`dce4dc3`](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/commit/dce4dc32b2369f3c2366630487628e32e8be0c0c))
+- Optimize workflow ([#49](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/pull/49),
+  [`21833cf`](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/commit/21833cfa246b8fac3793a6a02616af79787074de))
 
-- Pre-commit implemented
-  ([#45](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/pull/45),
-  [`dce4dc3`](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/commit/dce4dc32b2369f3c2366630487628e32e8be0c0c))
+- Optimize workflow ([#48](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/pull/48),
+  [`e7951de`](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/commit/e7951dedb5b44ecb052a756685965febc84f5461))
 
-- Security action fixed (.venv exclusion)
-  ([#45](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/pull/45),
-  [`dce4dc3`](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/commit/dce4dc32b2369f3c2366630487628e32e8be0c0c))
+- Optimize workflow 2 ([#52](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/pull/52),
+  [`323fe98`](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/commit/323fe98215a735db750831360eb9cb2db73af6fa))
 
-- Test fix ([#45](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/pull/45),
-  [`dce4dc3`](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/commit/dce4dc32b2369f3c2366630487628e32e8be0c0c))
+- Optimize workflow 2 ([#51](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/pull/51),
+  [`010f159`](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/commit/010f159385a70d6613013fcb2b218e147982b9e0))
 
-- Test patch bump ([#45](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/pull/45),
-  [`dce4dc3`](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/commit/dce4dc32b2369f3c2366630487628e32e8be0c0c))
+- Optimize workflow 2 ([#50](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/pull/50),
+  [`65a046e`](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/commit/65a046eb7afbfcce5643693e7559b54fe32a925b))
 
-### Features
+- Test patch bump ([#52](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/pull/52),
+  [`323fe98`](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/commit/323fe98215a735db750831360eb9cb2db73af6fa))
 
-- Workflow finalize ([#45](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/pull/45),
-  [`dce4dc3`](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/commit/dce4dc32b2369f3c2366630487628e32e8be0c0c))
+- Test patch bump ([#51](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/pull/51),
+  [`010f159`](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/commit/010f159385a70d6613013fcb2b218e147982b9e0))
+
+- Test patch bump ([#50](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/pull/50),
+  [`65a046e`](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/commit/65a046eb7afbfcce5643693e7559b54fe32a925b))
+
+- Test patch bump ([#49](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/pull/49),
+  [`21833cf`](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/commit/21833cfa246b8fac3793a6a02616af79787074de))
+
+- Test patch bump ([#48](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/pull/48),
+  [`e7951de`](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/commit/e7951dedb5b44ecb052a756685965febc84f5461))
 
 
 ## v1.1.0 (2026-02-07)
