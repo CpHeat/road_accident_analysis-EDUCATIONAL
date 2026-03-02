@@ -1,4 +1,5 @@
 import logging
+import time
 from collections.abc import Sequence
 from typing import Any
 
@@ -8,6 +9,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from models import Prediction
 from schemas import AccidentInput, PredictionResponse
 from services.feature_service import derive_all_features
+from services.metrics_service import record_inference_time, record_prediction
 from services.ml_service import predict
 
 logger = logging.getLogger(__name__)
@@ -41,8 +43,12 @@ async def create_prediction(data: AccidentInput, db: AsyncSession) -> Prediction
 
     # Prédiction ML
     logger.info("Appel du modèle de prédiction...")
+    start = time.perf_counter()
     result = predict(features)
-    logger.info(f"Résultat de la prédiction: {result}")
+    inference_duration = time.perf_counter() - start
+    record_inference_time(inference_duration)
+    record_prediction(result["gravite"], result["probabilite_grave"])
+    logger.info(f"Résultat de la prédiction: {result} (inférence: {inference_duration:.4f}s)")
 
     # Persistance en base de données
     prediction_record = Prediction(
