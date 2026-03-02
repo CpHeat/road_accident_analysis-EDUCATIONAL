@@ -8,6 +8,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from database import get_db
 from models import Prediction
 from schemas import AccidentInput, PredictionHistory, PredictionResponse
+from services.metrics_service import record_http_error, record_ml_error
 from services.prediction_service import create_prediction, get_prediction_history
 
 logger = logging.getLogger(__name__)
@@ -30,9 +31,13 @@ async def predict_accident(data: AccidentInput, db: Annotated[AsyncSession, Depe
         return await create_prediction(data, db)
     except ValueError as e:
         logger.error(f"Erreur de validation: {e}")
+        record_ml_error("feature_engineering_failed")
+        record_http_error(400, "/predict")
         raise HTTPException(status_code=400, detail=str(e)) from e
     except FileNotFoundError as e:
         logger.error(f"Modèle non trouvé: {e}")
+        record_ml_error("model_not_loaded")
+        record_http_error(503, "/predict")
         raise HTTPException(status_code=503, detail=str(e)) from e
 
 

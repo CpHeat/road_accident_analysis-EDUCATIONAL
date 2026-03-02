@@ -13,6 +13,7 @@ dependencies = [
     "numpy>=2.4.1",
     "pandas>=3.0.0",
     "pandas-stubs>=3.0.0.260204",
+    "prometheus-fastapi-instrumentator>=7.1.0",
     "psycopg2-binary>=2.9.11",
     "scikit-learn>=1.8.0",
     "sqlalchemy>=2.0.46",
@@ -83,7 +84,7 @@ disallow_untyped_defs = true
 plugins = ["sqlalchemy.ext.mypy.plugin"]
 
 [[tool.mypy.overrides]]
-module = ["joblib.*", "catboost.*", "xgboost.*", "sklearn.*"]
+module = ["joblib.*", "catboost.*", "xgboost.*", "sklearn.*", "prometheus_client.*", "prometheus_fastapi_instrumentator.*"]
 ignore_missing_imports = true
 
 # =============================================================================
