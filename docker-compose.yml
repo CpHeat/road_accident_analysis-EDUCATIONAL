@@ -72,6 +72,49 @@ services:
       - backend_storage:/app/storage
     restart: unless-stopped
 
+  # =========================================================================
+  # Monitoring
+  # =========================================================================
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    networks:
+      - accident-ml
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./monitoring/prometheus_data:/prometheus
+    depends_on:
+      accident-ml-backend:
+        condition: service_healthy
+    restart: unless-stopped
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    networks:
+      - accident-ml
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./monitoring/grafana_data:/var/lib/grafana
+      - ./monitoring/grafana/datasources:/etc/grafana/provisioning/datasources:ro
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    depends_on:
+      - prometheus
+    restart: unless-stopped
+
+  node-exporter:
+    image: prom/node-exporter:latest
+    container_name: node-exporter
+    networks:
+      - accident-ml
+    ports:
+      - "9100:9100"
+    restart: unless-stopped
+
 volumes:
   backend_storage:
   postgres_data:

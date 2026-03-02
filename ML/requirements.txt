@@ -6,5 +6,8 @@ joblib
 scikit-learn
 hyperopt
 fastparquet
+mlflow
+kaleido
 nbformat
-setuptools
+setuptools<81
+boto3
