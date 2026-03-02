@@ -9,6 +9,7 @@ from fastapi.responses import JSONResponse
 from controllers.health import router as health_router
 from controllers.prediction import router as prediction_router
 from database import init_db
+from services.metrics_service import get_instrumentator, init_uptime, record_http_error
 from services.ml_service import load_model
 
 # Configuration du logging
@@ -18,9 +19,10 @@ logger = logging.getLogger(__name__)
 
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncGenerator[None]:
-    """Charge le modèle et initialise la BDD au démarrage."""
+    """Charge le modèle, initialise la BDD et les métriques au démarrage."""
     load_model()
     await init_db()
+    init_uptime()
     yield
 
 
@@ -33,6 +35,10 @@ app = FastAPI(
 
 app.include_router(health_router)
 app.include_router(prediction_router)
+
+# Instrumentation Prometheus
+instrumentator = get_instrumentator()
+instrumentator.instrument(app).expose(app, endpoint="/metrics")
 
 
 @app.exception_handler(RequestValidationError)
@@ -59,6 +65,8 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
             logger.error(f"    Valeur reçue: {error.get('input')}")
 
     logger.error("=" * 50)
+
+    record_http_error(422, str(request.url.path))
 
     return JSONResponse(
         status_code=422,
