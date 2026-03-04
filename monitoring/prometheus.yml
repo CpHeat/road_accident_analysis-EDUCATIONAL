@@ -23,7 +23,7 @@ scrape_configs:
   - job_name: "uptime-kuma"
     basic_auth:
       username: ""
-      password: "uk1_LjE3lT7YmaU6NHgyh3S0mQSNg573cshkarbLAUxM"
+      password: "__UPTIME_KUMA_API_KEY__"
     static_configs:
       - targets: ["uptime-kuma:3001"]
     metrics_path: /metrics

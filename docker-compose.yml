@@ -85,8 +85,16 @@ services:
     ports:
       - "9090:9090"
     volumes:
-      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.template.yml:ro
       - ./monitoring/prometheus_data:/prometheus
+    environment:
+      - UPTIME_KUMA_API_KEY=${UPTIME_KUMA_API_KEY}
+    entrypoint: /bin/sh
+    command:
+      - -c
+      - |
+        sed "s|__UPTIME_KUMA_API_KEY__|$$UPTIME_KUMA_API_KEY|g" /etc/prometheus/prometheus.template.yml > /etc/prometheus/prometheus.yml
+        /bin/prometheus --config.file=/etc/prometheus/prometheus.yml --storage.tsdb.path=/prometheus
     depends_on:
       accident-ml-backend:
         condition: service_healthy
