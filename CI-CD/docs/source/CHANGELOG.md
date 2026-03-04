@@ -2,6 +2,14 @@
 
 <!-- version list -->
 
+## v1.3.0-beta.6 (2026-03-04)
+
+### Bug Fixes
+
+- Replaced costly api calls with astral
+  ([`00f8e04`](https://github.com/CpHeat/road_accident_analysis-EDUCATIONAL/commit/00f8e045004fa62c0af8ffaad4c2c2667ed4f98d))
+
+
 ## v1.3.0-beta.5 (2026-03-02)
 
 ### Bug Fixes
