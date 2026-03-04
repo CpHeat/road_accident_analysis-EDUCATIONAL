@@ -1,8 +1,9 @@
 import logging
-from datetime import date, datetime, time
+from datetime import date, time
 from typing import Any
 
-import httpx
+from astral import LocationInfo
+from astral.sun import sun
 
 logger = logging.getLogger(__name__)
 
@@ -114,9 +115,6 @@ DEPARTEMENTS: dict[str, dict[str, float]] = {
     "976": {"lat": -12.8, "lon": 45.2},  # Mayotte
 }
 
-# Cache pour les horaires de lever/coucher du soleil
-_sun_times_cache: dict[str, dict[str, time]] = {}
-
 
 def _get_departement_coords(departement: str) -> tuple[float, float]:
     """Retourne les coordonnées (lat, lon) du centroïde d'un département."""
@@ -126,48 +124,11 @@ def _get_departement_coords(departement: str) -> tuple[float, float]:
     return coords["lat"], coords["lon"]
 
 
-async def _get_sun_times(date_str: str, latitude: float, longitude: float) -> dict[str, time]:
-    """
-    Récupère les heures de lever/coucher du soleil via API externe.
-    Utilise un cache en mémoire pour éviter les appels répétés.
-
-    Fallback: 6h-22h si l'API échoue.
-    """
-    cache_key = f"{date_str}_{latitude:.1f}_{longitude:.1f}"
-
-    if cache_key in _sun_times_cache:
-        return _sun_times_cache[cache_key]
-
-    try:
-        async with httpx.AsyncClient(timeout=5.0) as client:
-            response = await client.get(
-                "https://api.sunrise-sunset.org/json",
-                params={
-                    "lat": latitude,
-                    "lng": longitude,
-                    "date": date_str,
-                    "formatted": 0,
-                },
-            )
-            response.raise_for_status()
-            data = response.json()
-
-            if data.get("status") == "OK":
-                results = data["results"]
-                # Parse ISO format: "2024-01-15T07:30:00+00:00"
-                sunrise = datetime.fromisoformat(results["sunrise"].replace("Z", "+00:00")).time()
-                sunset = datetime.fromisoformat(results["sunset"].replace("Z", "+00:00")).time()
-
-                sun_times = {"sunrise": sunrise, "sunset": sunset}
-                _sun_times_cache[cache_key] = sun_times
-                return sun_times
-    except Exception:
-        logger.warning("Failed to fetch sun times from API, using fallback", exc_info=True)
-
-    # Fallback: 6h-22h
-    fallback = {"sunrise": time(6, 0), "sunset": time(22, 0)}
-    _sun_times_cache[cache_key] = fallback
-    return fallback
+def _get_sun_times(date_str: str, latitude: float, longitude: float) -> dict[str, time]:
+    """Calcule les heures de lever/coucher du soleil via la lib astral (calcul local)."""
+    observer = LocationInfo(latitude=latitude, longitude=longitude).observer
+    s = sun(observer, date=date.fromisoformat(date_str))
+    return {"sunrise": s["sunrise"].time(), "sunset": s["sunset"].time()}
 
 
 def _is_night(hour: int, minute: int, sunrise: time, sunset: time) -> int:
@@ -221,7 +182,7 @@ async def derive_all_features(
     latitude, longitude = _get_departement_coords(departement)
 
     # Horaires du soleil
-    sun_times = await _get_sun_times(date_str, latitude, longitude)
+    sun_times = _get_sun_times(date_str, latitude, longitude)
 
     return {
         "est_nuit": _is_night(hour, minute, sun_times["sunrise"], sun_times["sunset"]),

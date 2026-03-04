@@ -37,6 +37,18 @@ ML_INFERENCE_DURATION = Histogram(
     buckets=[0.005, 0.01, 0.025, 0.05, 0.1, 0.25, 0.5, 1.0, 2.5],
 )
 
+FEATURE_ENGINEERING_DURATION = Histogram(
+    "feature_engineering_duration_seconds",
+    "Durée du feature engineering (incluant appel API sunrise-sunset)",
+    buckets=[0.005, 0.01, 0.025, 0.05, 0.1, 0.25, 0.5, 1.0, 2.5, 5.0],
+)
+
+DB_WRITE_DURATION = Histogram(
+    "db_write_duration_seconds",
+    "Durée de l'écriture en base de données",
+    buckets=[0.005, 0.01, 0.025, 0.05, 0.1, 0.25, 0.5, 1.0, 2.5],
+)
+
 ML_ERRORS_TOTAL = Counter(
     "ml_errors_total",
     "Nombre total d'erreurs ML",
@@ -79,6 +91,16 @@ def record_inference_time(duration: float) -> None:
     ML_INFERENCE_DURATION.observe(duration)
 
 
+def record_feature_engineering_time(duration: float) -> None:
+    """Enregistre le temps de feature engineering."""
+    FEATURE_ENGINEERING_DURATION.observe(duration)
+
+
+def record_db_write_time(duration: float) -> None:
+    """Enregistre le temps d'écriture en base de données."""
+    DB_WRITE_DURATION.observe(duration)
+
+
 def record_ml_error(error_type: str) -> None:
     """Enregistre une erreur ML."""
     ML_ERRORS_TOTAL.labels(error_type=error_type).inc()
@@ -100,11 +122,9 @@ def get_instrumentator() -> Instrumentator:
         should_group_status_codes=False,
         should_ignore_untemplated=True,
         excluded_handlers=["/metrics"],
-    )
-
-    # Callback pour mettre à jour l'uptime à chaque scrape
-    instrumentator.add(
-        lambda info: _update_uptime(),
+        should_instrument_requests_inprogress=True,
+        inprogress_name="http_requests_in_progress",
+        inprogress_labels=True,
     )
 
     return instrumentator
