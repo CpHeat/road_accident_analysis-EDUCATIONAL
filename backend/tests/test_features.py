@@ -6,7 +6,7 @@ Ces tests vérifient la logique métier de dérivation des features
 """
 
 from datetime import date, time
-from unittest.mock import AsyncMock, patch
+from unittest.mock import patch
 
 import pytest
 
@@ -161,7 +161,7 @@ class TestDeriveAllFeatures:
     @pytest.mark.asyncio
     async def test_derive_features_complete(self, mock_sun_times: dict[str, time]) -> None:
         """Dérivation complète des features."""
-        with patch("services.feature_service._get_sun_times", new_callable=AsyncMock, return_value=mock_sun_times):
+        with patch("services.feature_service._get_sun_times", return_value=mock_sun_times):
             features = await derive_all_features(
                 date_str="2024-06-15",
                 heure_str="08:30",
@@ -186,7 +186,7 @@ class TestDeriveAllFeatures:
     @pytest.mark.asyncio
     async def test_derive_features_night(self, mock_sun_times: dict[str, time]) -> None:
         """Dérivation avec heure de nuit."""
-        with patch("services.feature_service._get_sun_times", new_callable=AsyncMock, return_value=mock_sun_times):
+        with patch("services.feature_service._get_sun_times", return_value=mock_sun_times):
             features = await derive_all_features(
                 date_str="2024-06-15",
                 heure_str="23:00",
@@ -233,7 +233,7 @@ class TestDeriveAllFeatures:
             "impl_pieton",
         }
 
-        with patch("services.feature_service._get_sun_times", new_callable=AsyncMock, return_value=mock_sun_times):
+        with patch("services.feature_service._get_sun_times", return_value=mock_sun_times):
             features = await derive_all_features(
                 date_str="2024-06-15",
                 heure_str="12:00",

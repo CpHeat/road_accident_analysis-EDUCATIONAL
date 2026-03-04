@@ -9,7 +9,12 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from models import Prediction
 from schemas import AccidentInput, PredictionResponse
 from services.feature_service import derive_all_features
-from services.metrics_service import record_inference_time, record_prediction
+from services.metrics_service import (
+    record_db_write_time,
+    record_feature_engineering_time,
+    record_inference_time,
+    record_prediction,
+)
 from services.ml_service import predict
 
 logger = logging.getLogger(__name__)
@@ -29,6 +34,7 @@ async def create_prediction(data: AccidentInput, db: AsyncSession) -> Prediction
 
     # Dériver les features
     logger.info("Dérivation des features...")
+    fe_start = time.perf_counter()
     features: dict[str, Any] = await derive_all_features(
         date_str=data.date,
         heure_str=data.heure,
@@ -39,12 +45,15 @@ async def create_prediction(data: AccidentInput, db: AsyncSession) -> Prediction
         impl_poids_lourd=data.impl_poids_lourd,
         impl_pieton=data.impl_pieton,
     )
+    record_feature_engineering_time(time.perf_counter() - fe_start)
     logger.info(f"Features dérivées: {features}")
 
     # Prédiction ML
     logger.info("Appel du modèle de prédiction...")
     start = time.perf_counter()
     result = predict(features)
+
+    # Metrics recording
     inference_duration = time.perf_counter() - start
     record_inference_time(inference_duration)
     record_prediction(result["gravite"], result["probabilite_grave"])
@@ -65,9 +74,11 @@ async def create_prediction(data: AccidentInput, db: AsyncSession) -> Prediction
         probabilite_grave=result["probabilite_grave"],
         label=result["label"],
     )
+    db_start = time.perf_counter()
     db.add(prediction_record)
     await db.commit()
     await db.refresh(prediction_record)
+    record_db_write_time(time.perf_counter() - db_start)
     logger.info(f"Prédiction sauvegardée avec ID: {prediction_record.id}")
     logger.info("=" * 50)
 
