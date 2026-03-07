@@ -3,8 +3,6 @@
 .idea
 *__pycache__
 *_cache
-grafana_data
 prometheus_data
-uptime_kuma_data
 *.cache
 .claude
